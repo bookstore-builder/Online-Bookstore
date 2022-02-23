@@ -1,0 +1,35 @@
+.booklist {
+    margin: 20px auto 20px 250px;
+    width:725px !important;
+}
+.bookImg{
+    height: 160px;
+}
+
+.ant-card-meta-title{
+    font-size:14px !important;
+}
+
+.ant-card-meta-description{
+    color: red !important;
+}
+.jumpPage{
+    text-align: center;
+    margin: 10px;
+}
+.jumpPage a{
+    padding:2px 6px;
+    border: 1px solid #9AAFE5;
+    text-decoration: none;
+    color:#9AAFE5;
+}
+.jumpPage a:hover{
+    color:#2B66A5;
+    border: 1px solid #2B66A5;
+}
+.dropDown{
+    margin-left: 240px;
+}
+.Clear{
+    clear:both;
+}

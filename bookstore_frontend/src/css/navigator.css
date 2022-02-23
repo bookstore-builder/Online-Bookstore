@@ -1,0 +1,80 @@
+.top{
+    height: 50px;
+    width:100%;
+    background-color: #f1f1f1;
+    position: fixed; 
+    top: 0;
+    z-index: 10;
+}
+.round_icon_{
+    margin-top: 0px;
+    margin-left: 10px;
+    float:right;
+    width: 35px;
+    height: 32px;
+    display: flex;
+    cursor: pointer;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.top h2{
+    float:left;
+    margin-top: 10px;
+    border-style: none;
+    top: 0px;
+}
+.top_right{
+    margin-right:50px;
+    margin-top: 10px;
+    float:right;
+    line-height: 31px;
+}
+.top_right ul li {
+    list-style: none;
+    color: #666;
+    float: left;
+}
+.top_right ul li a{
+    text-decoration: none;
+    font-size: 20px;
+    color: #666;
+}
+.top_right ul li:hover ul{
+    display: block;
+}
+.top_left{
+    margin-right:50px;
+    float:left;
+    line-height: 31px;
+}
+.top_left ul li{
+    list-style: none;
+    color: #666;
+    float: right;
+}
+.top_left ul li a{
+    text-decoration: none;
+    color: #666;
+}
+.logo {
+    margin-left:20px;
+    float: left;
+    overflow:visible;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: middle;
+    border-style: none;
+}
+.logo img{
+    height:50px;
+    width:50px;
+    vertical-align: middle;
+}
+.vl {
+    width: 1px;
+    height: 12px;
+    background-color: #666;
+    margin: 9px 12px 9px 12px;
+}

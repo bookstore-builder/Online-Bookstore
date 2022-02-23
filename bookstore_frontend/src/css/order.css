@@ -1,0 +1,46 @@
+.analyze{
+    margin-left:60px;
+    /* margin-top: 20px; */
+    margin-bottom: 20px;
+    margin-right:100px;
+    height:50px;
+    width:1300px;
+    overflow: hidden;
+}
+.statistic-button{
+    width: 150px;
+    margin-top: 20px;
+    height: 30px;
+    margin-left: 10px;
+    font-size: medium;
+    float: left;
+}
+.charts{
+    margin-left:60px;
+    margin-bottom: 20px;
+    margin-right:100px;
+    max-height:700px;
+    width:1300px;
+    overflow: hidden;
+}
+.barChart{
+    float: left;
+    width: 600px;
+    margin-left: 50px;
+    margin-top: 0px;
+    margin-bottom: 50px;
+}
+.pieChart{
+    margin-left: 100px;
+    width:500px;
+    float:left;
+}
+.search{
+    margin-left: 150px;
+    margin-top: 20px;
+    float:left;
+    width:400px;
+}
+.Clear{
+    clear:both
+}

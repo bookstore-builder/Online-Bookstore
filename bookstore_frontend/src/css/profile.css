@@ -1,0 +1,51 @@
+.profile{
+    margin-left:200px;
+    width:1000px;
+    height:100%;
+}
+.form {
+    margin-left:20px;
+    margin-top: 10px;
+    max-width: 500px;
+    float: left;
+}
+.avatar{
+    margin-right: 100px;
+    margin-top: 10px;
+    float:right;
+    width: 500px;
+    /* height: 240px; */
+}
+.chart{
+    margin-left: 60px;
+    margin-top: 50px;
+}
+.round_icon{
+    margin-left: 150px;
+    width: 250px;
+    height: 250px; 
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.fileinput{
+    width: 200px;
+    font-size:12px;
+    margin-left:50px;
+    margin-top:0px;
+    position:absolute;
+    z-index: 1;
+    filter:alpha(opacity=0);
+    -moz-opacity: 0;
+    opacity: 0;
+}
+.fileinput:hover{
+    cursor: pointer;
+}
+.input-format{
+    border-radius:3px;
+    height:35px;
+    width:80%;
+}
