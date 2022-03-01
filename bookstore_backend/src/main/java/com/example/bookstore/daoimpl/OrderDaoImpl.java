@@ -4,7 +4,7 @@ import com.example.bookstore.dao.OrderDao;
 import com.example.bookstore.entity.*;
 import com.example.bookstore.repository.*;
 import com.example.bookstore.dto.BookStatisticResult;
-import com.example.bookstore.dto.OrderPage;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.utils.msgutils.Msg;
@@ -130,7 +130,7 @@ public class OrderDaoImpl implements OrderDao{
         return orderResults;
     }
 
-    public OrderPage getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId){
+    public DataPage<OrderResult> getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId){
         List<OrderResult> orderResults = new ArrayList<>();
         Integer key = 0;
         Integer userType = userAuthRepository.findByUserId(userId).getUserType();
@@ -172,7 +172,8 @@ public class OrderDaoImpl implements OrderDao{
         orderResults.sort(Comparator.comparing(OrderResult::getDate).reversed());
         int fromIndex = (pageNum-1) * pageSize;
         int toIndex = Math.min((pageNum)*pageSize, orderResults.size());
-        return new OrderPage(orderResults.subList(fromIndex, toIndex), orderResults.size(), pageNum, pageSize);
+        long total_size = orderResults.size();
+        return new DataPage<OrderResult>(orderResults.subList(fromIndex, toIndex), total_size, pageNum, pageSize);
     }
 
     public List<BookStatisticResult> getBookStatistic(String time) {

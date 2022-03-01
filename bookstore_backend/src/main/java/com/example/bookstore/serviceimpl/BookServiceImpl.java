@@ -2,19 +2,23 @@ package com.example.bookstore.serviceimpl;
 
 import com.example.bookstore.dao.BookDao;
 import com.example.bookstore.entity.Book;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.service.BookService;
+import com.example.bookstore.utils.RedisUtil;
 import com.example.bookstore.utils.msgutils.Msg;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
+@AllArgsConstructor
 public class BookServiceImpl implements BookService {
-
-    @Autowired
-    private BookDao bookDao;
+    private final BookDao bookDao;
+    private final RedisUtil redisUtil;
 
     @Override
     public Book getBook(Integer id){
@@ -22,7 +26,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> getBooks() { return bookDao.getBooks(); }
+    public DataPage<Book> getBookPage(Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return bookDao.getBooks(pageable);
+    }
+
+    @Override
+    public DataPage<Book> searchBookPage(String word, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return bookDao.searchBooks(word, pageable);
+    }
 
     @Override
     public Msg addBook(Book book) { return bookDao.addBook(book); }
@@ -37,9 +50,16 @@ public class BookServiceImpl implements BookService {
     public Msg updateBook(Book book) { return bookDao.updateBook(book); }
 
     @Override
-    public List<Book> getSimilarBooks(String type) { return bookDao.getSimilarBooks(type); }
+    public DataPage<Book> getSimilarBooks(String type, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return bookDao.getSimilarBooks(type, pageable);
+    }
 
     @Override
     public List<Map<String, String>> getTopBooks() { return bookDao.getTopBooks(); }
 
+    @Override
+    public Long getHomePageViewsCount() {
+        return redisUtil.getViewsRecord();
+    }
 }
