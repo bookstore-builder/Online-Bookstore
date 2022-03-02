@@ -22,9 +22,6 @@ let info = {
     description: "本书是Java领域有影响力和价值的著作之一，由拥有20多年教学与研究经验的Java技术专家撰写（获Jolt大奖），与《Java编程思想》齐名，10余年全球畅销不衰，广受好评。第10版根据JavaSE8全面更新，同时修正了第9版中的不足，系统全面讲解了Java语言的核心概念、语法、重要特性和开发方法，包含大量案例，实践性强。"
 };
 
-let data = []
-const searchData = []
-
 Date.prototype.format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1,
@@ -51,8 +48,13 @@ class AdminBookView extends React.Component {
             flag: false,
             info: info,
             delete: '',
+            searchText: '',
             data: [],
             chartData: [],
+            pagination: {
+                current: 0,
+                pageSize: 12,
+            },
         };
     }
 
@@ -60,7 +62,6 @@ class AdminBookView extends React.Component {
         info.name = name;
         this.setState({
             info: info,
-            data: data,
         });
     }
 
@@ -125,12 +126,24 @@ class AdminBookView extends React.Component {
     }
 
     handleSearch = (name) => {
-        searchData.length = 0;
-        data.forEach((product) => {
-            if(product.name.includes(name) || name == '')
-                searchData.push(product);
-        })
-        this.setState({data: searchData,});
+        this.setState({
+            searchText: name,
+        });
+        const { pagination } = this.state;
+        bookService.searchBookPage(name, pagination.current, pagination.pageSize,
+            (_data) => {
+                this.setState({data: _data.objectList, 
+                pagination: {total: _data.total, current: _data.currentPage, pageSize: _data.pageSize}});
+            });
+    }
+
+    handlePage = (current, pageSize) => {
+        const { searchText } = this.state;
+        bookService.searchBookPage(searchText, current, pageSize,
+            (_data) => {
+                this.setState({data: _data.objectList, 
+                pagination: {total: _data.total, current: _data.currentPage, pageSize: _data.pageSize}});
+            });
     }
 
     onEdit = () => {
@@ -147,16 +160,12 @@ class AdminBookView extends React.Component {
     }
 
     componentDidMount() {
-        const callback = (allData) => {
-            for(let i = 0; i < allData.length; i++){
-                let book = {};
-                book.name = allData[i].name;
-                book.id = allData[i].bookId;
-                data.push(book);
-            }
-            this.setState({data: data});
-        }
-        bookService.getBooks({"search":null}, callback);
+        const { pagination } = this.state;
+        bookService.getBookPage(pagination.current, pagination.pageSize,
+            (_data) => {
+                this.setState({data: _data.objectList, 
+                pagination: {total: _data.total, current: _data.currentPage, pageSize: _data.pageSize}});
+            });
 
         let user = localStorage.getItem("user");
         this.setState({user:user});
@@ -180,8 +189,10 @@ class AdminBookView extends React.Component {
                 <div className="Content">
                     <BookSideBar 
                     data={this.state.data}
+                    pagination={this.state.pagination}
                     handleSearch={this.handleSearch}
                     handleSubmit={this.handleSubmit}
+                    handlePage={this.handlePage}
                     />
                     <div className="Content-main">
                         {this.state.flag ?

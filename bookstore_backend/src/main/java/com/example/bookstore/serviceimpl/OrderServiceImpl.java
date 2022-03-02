@@ -2,7 +2,7 @@ package com.example.bookstore.serviceimpl;
 
 import com.example.bookstore.dao.OrderDao;
 import com.example.bookstore.dto.BookStatisticResult;
-import com.example.bookstore.dto.OrderPage;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.service.OrderService;
@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService{
     public List<OrderResult> getAllOrderBooks() { return orderDao.getAllOrderBooks(); }
 
     @Override
-    public OrderPage getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId)
+    public DataPage<OrderResult> getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId)
     {
         return orderDao.getOrderPage(pageNum, pageSize, search, time, userId);
     }

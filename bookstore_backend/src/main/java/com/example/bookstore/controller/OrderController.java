@@ -1,7 +1,7 @@
 package com.example.bookstore.controller;
 
 import com.example.bookstore.dto.BookStatisticResult;
-import com.example.bookstore.dto.OrderPage;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.service.OrderService;
@@ -26,9 +26,9 @@ public class OrderController {
     public List<OrderResult> getAllOrderBooks() { return orderService.getAllOrderBooks(); }
 
     @RequestMapping(value = "/getOrderPage")
-    public OrderPage getOrderPage(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize,
-                                  @RequestParam("search") String search, @RequestParam("time") String time,
-                                  @RequestParam("userId") Integer userId){
+    public DataPage<OrderResult> getOrderPage(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize,
+                                        @RequestParam("search") String search, @RequestParam("time") String time,
+                                        @RequestParam("userId") Integer userId){
         return orderService.getOrderPage(pageNum, pageSize, search, time, userId);
     }
 
