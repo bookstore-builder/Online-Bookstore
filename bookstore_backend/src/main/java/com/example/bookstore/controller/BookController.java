@@ -6,6 +6,7 @@ import com.example.bookstore.service.BookService;
 import com.example.bookstore.utils.RedisUtil;
 import com.example.bookstore.utils.msgutils.Msg;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@Slf4j
 @AllArgsConstructor
 public class BookController {
     private final String VIEWS_TOPIC = "/topic/views-count";
@@ -61,10 +63,11 @@ public class BookController {
     @RequestMapping(value = "/getTopBooks")
     public List<Map<String, String>> getTopBooks() { return bookService.getTopBooks(); }
 
-    @MessageMapping(value = "/add-views")
-    @SendTo(VIEWS_TOPIC)
-    public Long getViewsCount() {
+    @RequestMapping(value = "/addViewsCount")
+    public Long addViewsCount() {
         redisUtil.addViewsRecord();
-        return bookService.getHomePageViewsCount();
+        Long view_counts = redisUtil.getViewsRecord();
+        log.info("总用户访问量："+ view_counts);
+        return view_counts;
     }
 }

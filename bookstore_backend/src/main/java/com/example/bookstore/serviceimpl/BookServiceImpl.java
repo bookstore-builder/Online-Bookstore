@@ -63,9 +63,4 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Map<String, String>> getTopBooks() { return bookDao.getTopBooks(); }
-
-    @Override
-    public Long getHomePageViewsCount() {
-        return redisUtil.getViewsRecord();
-    }
 }

@@ -29,6 +29,4 @@ public interface BookService {
     DataPage<Book> getSimilarBooks(String type, Integer pageNum, Integer pageSize);
 
     List<Map<String, String>> getTopBooks();
-
-    Long getHomePageViewsCount();
 }

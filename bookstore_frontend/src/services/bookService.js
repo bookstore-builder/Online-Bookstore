@@ -2,6 +2,11 @@ import { message } from 'antd';
 import config from 'config';
 import {postRequest, postRequest_v2} from "../utils/ajax";
 
+export const addViewsCount = (data, callback) => {
+    const url = `${config.apiUrl}/addViewsCount`;
+    postRequest(url, data, callback);
+}
+
 export const getBooks = (data, callback) => {
     const url = `${config.apiUrl}/getBooks`;
     postRequest(url, data, callback);
