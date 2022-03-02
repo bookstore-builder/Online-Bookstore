@@ -36,6 +36,12 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    public DataPage<Book> searchTypeBooks(String word, String type, Pageable pageable) {
+        return new DataPage<>(bookRepository.searchTypeBooks(word, type, pageable));
+    }
+
+    @Override
+    @Cacheable(value = "book-name", key = "#p0 + '-' + #p1.pageNumber + '-' + #p1.pageSize")
     public DataPage<Book> searchBooks(String word, Pageable pageable) {
         return new DataPage<>(bookRepository.searchBooks(word, pageable));
     }

@@ -47,10 +47,15 @@ class BookView extends React.Component {
             bookInfo: [],
             similarBooks: [],
             chartData: [],
+            pagination: {
+                current: 0,
+                pageSize: 16,
+            },
         }
     }
 
     componentDidMount(){
+        const { pagination } = this.state;
         let user = localStorage.getItem("user");
         this.setState({user:user});
         const query = this.props.location.search;
@@ -59,8 +64,10 @@ class BookView extends React.Component {
         this.setState({bookId: bookId});
         getBook(bookId, (data) => {
             this.setState({bookInfo: data});
-            getSimilarBooks(data.type, (data) => {
-                this.setState({similarBooks: data});
+            getSimilarBooks(data.type, pagination.current, pagination.pageSize,
+                (data) => {
+                this.setState({similarBooks: data.objectList,
+                pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
             });
         });
         let date = new Date();
@@ -144,6 +151,15 @@ class BookView extends React.Component {
         this.setState({ __visible:false, });
     }
 
+    handlePage = (current, pageSize) => {
+        const { bookInfo } = this.state;
+        getSimilarBooks(bookInfo.type, current, pageSize,
+            (data) => {
+            this.setState({similarBooks: data.objectList,
+            pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+        });
+    }
+
     render() {
         return (
             <div className="Container">
@@ -218,7 +234,9 @@ class BookView extends React.Component {
                     </div>
                     <h1 style={{ marginLeft: "30px" }}>类似书籍</h1>
                     <Booklist 
-                    books={this.state.similarBooks}/>
+                    books={this.state.similarBooks} pagination={this.state.pagination}
+                    handlePage={this.handlePage}
+                    />
                 </div>
             </div>
         )

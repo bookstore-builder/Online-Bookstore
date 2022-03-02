@@ -13,6 +13,8 @@ public interface BookDao {
 
     DataPage<Book> getBooks(Pageable pageable);
 
+    DataPage<Book> searchTypeBooks(String word, String type, Pageable pageable);
+
     DataPage<Book> searchBooks(String word, Pageable pageable);
 
     Msg addBook(Book book);

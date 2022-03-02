@@ -127,8 +127,8 @@ export class OrderTable extends React.Component{
         // fetch
         orderService.getOrderPage(pagination.current, pagination.pageSize, '', time, userId,
           (data) => {
-            this.setState({data: data.orderList, 
-              pagination: {total: data.total, current: data.pageNum, pageSize: data.pageSize}});
+            this.setState({data: data.objectList, 
+              pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
           });
       }
     
@@ -169,8 +169,8 @@ export class OrderTable extends React.Component{
           // fetch
           orderService.getOrderPage(pagination.current, pagination.pageSize, search, time, userId,
             (data) => {
-              this.setState({data: data.orderList, 
-                pagination: {total: data.total, current: data.pageNum, pageSize: data.pageSize}});
+              this.setState({data: data.objectList, 
+                pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
             });
       };
 

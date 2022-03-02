@@ -32,6 +32,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public DataPage<Book> searchTypeBookPage(String word, String type, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        return bookDao.searchTypeBooks(word, type, pageable);
+    }
+
+    @Override
     public DataPage<Book> searchBookPage(String word, Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         return bookDao.searchBooks(word, pageable);

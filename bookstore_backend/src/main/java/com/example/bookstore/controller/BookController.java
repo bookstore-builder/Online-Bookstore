@@ -28,6 +28,11 @@ public class BookController {
         return bookService.getBookPage(pageNum, pageSize);
     }
 
+    @RequestMapping(value="/searchTypeBookPage")
+    public DataPage<Book> searchTypeBookPage(@RequestParam("word") String word, @RequestParam("type") String type, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
+        return bookService.searchTypeBookPage(word, type, pageNum, pageSize);
+    }
+
     @RequestMapping(value="/searchBookPage")
     public DataPage<Book> searchBookPage(@RequestParam("word") String word, @RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize) {
         return bookService.searchBookPage(word, pageNum, pageSize);

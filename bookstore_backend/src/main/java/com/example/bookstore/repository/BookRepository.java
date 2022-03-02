@@ -19,6 +19,9 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Query("select b from Book b where lower(b.name) like concat('%', :name, '%')")
     Page<Book> searchBooks(String name, Pageable pageable);
 
+    @Query("select b from Book b where lower(b.name) like concat('%', :name, '%') and b.type = :type")
+    Page<Book> searchTypeBooks(String name, String type, Pageable pageable);
+
     @Query("select b from Book b where b.type = :type")
     Page<Book> getSimilarBooks(String type, Pageable pageable);
 

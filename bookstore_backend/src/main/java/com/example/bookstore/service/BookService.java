@@ -14,6 +14,8 @@ public interface BookService {
 
     DataPage<Book> getBookPage(Integer pageNum, Integer pageSize);
 
+    DataPage<Book> searchTypeBookPage(String word, String type, Integer pageNum, Integer pageSize);
+
     DataPage<Book> searchBookPage(String word, Integer pageNum, Integer pageSize);
 
     Msg addBook(Book book);

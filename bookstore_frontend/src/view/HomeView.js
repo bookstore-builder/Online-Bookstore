@@ -6,11 +6,8 @@ import { Sidebar } from '../components/sidebar/Sidebar';
 import { Searchbar } from '../components/home/Searchbar';
 import { BookCarousel } from '../components/home/BookCarousel';
 import { Booklist } from '../components/book/Booklist';
-import {getBooks, getTopBooks} from "../services/bookService";
+import * as bookService from "../services/bookService";
 import '../css/home.css';
-
-let allData = []
-const _data = []
 
 class HomeView extends React.Component {
     constructor(props) {
@@ -19,6 +16,10 @@ class HomeView extends React.Component {
             filterText: '',
             filterClass: "全部",
             books: [], 
+            pagination: {
+                current: 0,
+                pageSize: 16,
+            },
         };
         this.handleFilterTextChange =
             this.handleFilterTextChange.bind(this);
@@ -26,15 +27,18 @@ class HomeView extends React.Component {
             this.handleSearch.bind(this);
         this.handleFilter = 
             this.handleFilter.bind(this);
+        this.handlePage = 
+            this.handlePage.bind(this);
     }
 
     componentDidMount() {
-        const callback = (data) => {
-            allData = data;
-            this.setState({books:data});
-        }
-        getBooks({"search":null}, callback);
-        getTopBooks((data) => {this.setState({topBooks: data});});
+        const { pagination } = this.state;
+        bookService.getBookPage(pagination.current, pagination.pageSize,
+            (data) => {
+                this.setState({books: data.objectList, 
+                pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+            });
+        bookService.getTopBooks((data) => {this.setState({topBooks: data});});
     }
 
     menu = (
@@ -74,22 +78,51 @@ class HomeView extends React.Component {
     }
 
     handleSearch() {
-        _data.length = 0;
-        allData.forEach((product) => {
-            if (product.name.includes(this.state.filterText) || this.state.filterText == '')
-                _data.push(product);
-        })
-        this.setState({ books: _data });
+        const { filterText, filterClass, pagination } = this.state;
+        if (filterClass === "全部")
+            bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
+                (data) => {
+                    this.setState({books: data.objectList, 
+                    pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+                });
+        else 
+            bookService.searchTypeBookPage(filterText, filterClass, pagination.current, pagination.pageSize,
+                (data) => {
+                    this.setState({books: data.objectList, 
+                    pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+                });
     }
 
     handleFilter() {
-        console.log("handle");
-        _data.length = 0;
-        allData.forEach((product) => {
-            if (product.type.includes(this.state.filterClass) || this.state.filterClass == "全部")
-                _data.push(product);
-        })
-        this.setState({ books: _data });
+        const { filterText, filterClass, pagination } = this.state;
+        if (filterClass === "全部")
+            bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
+                (data) => {
+                    this.setState({books: data.objectList, 
+                    pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+                });
+        else 
+            bookService.searchTypeBookPage(filterText, filterClass, pagination.current, pagination.pageSize,
+                (data) => {
+                    this.setState({books: data.objectList, 
+                    pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+                });
+    }
+
+    handlePage(current, pageSize) {
+        const { filterText, filterClass} = this.state;
+        if (filterClass === "全部")
+            bookService.searchBookPage(filterText, current, pageSize,
+                (data) => {
+                    this.setState({books: data.objectList, 
+                    pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+                });
+        else 
+            bookService.searchTypeBookPage(filterText, filterClass, current, pageSize,
+                (data) => {
+                    this.setState({books: data.objectList, 
+                    pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+                });
     }
 
     render() {
@@ -111,7 +144,8 @@ class HomeView extends React.Component {
                     </Dropdown>
                     <Booklist
                         marginLeft={"400px"} width={"750px"} marginTop={"20px"}
-                        books={this.state.books}
+                        books={this.state.books} pagination={this.state.pagination}
+                        handlePage={this.handlePage}
                     />
                 </div>
             </div>
