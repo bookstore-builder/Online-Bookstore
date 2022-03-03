@@ -9,7 +9,7 @@ const { TextArea } = Input;
 const CommentLst = ({ comments }) => (
     <List
         dataSource = {comments}
-        header = {`${comments.length} ${comments.length > 1 ? 'replies' : 'reply'}`}
+        header = {`${comments.length} ${comments.length > 1 ? 'comments' : 'comment'}`}
         itemLayout="horizontal"
         pagination= {{
             pageSize: 3,
@@ -50,7 +50,6 @@ export class CommentList extends React.Component{
             let results = [];
             for (var i=0, len=data.length; i<len; i++) {
                 let result = {
-                    actions: [<span key="comment-basic-reply-to">Reply to</span>],
                     author: data[i].author,
                     avatar: head,
                     content: <p>{data[i].comment}</p>,
@@ -78,7 +77,6 @@ export class CommentList extends React.Component{
                 comments: [
                     ...this.state.comments,
                     {
-                        actions: [<span key="comment-basic-reply-to">Reply to</span>],
                         author: this.state.userName,
                         avatar: head,
                         content: <p>{this.state.value}</p>,
