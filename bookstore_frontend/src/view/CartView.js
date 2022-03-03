@@ -57,21 +57,27 @@ class CartView extends React.Component {
 
     handleOK = () => {
         let userId = JSON.parse(this.state.user).userId;
-        cartService.deleteCartItems(userId, this.state.selectedBooks, (data) => {
-            if (data.code === 200) {
-                message.success(data.message);
-            }
-        });
-        let allData = [];
-        for (let i = 0; i < this.state.books.length; i++) {
-            let data = {};
-            data.userId = JSON.parse(this.state.user).userId;
-            data.bookId = this.state.books[i].bookId;
-            data.bookNum = this.state.books[i].num;
-            allData.push(data);
+        if (this.state.selectedBooks.length === 0){
+            message.error("请至少选择一件商品！");
+            this.setState({ visible: false });
         }
-        orderService.changeBookNums(allData);
-        this.setState({ visible: false, _visible: true });
+        else{
+            cartService.deleteCartItems(userId, this.state.selectedBooks, (data) => {
+                if (data.code === 200) {
+                    message.success(data.message);
+                }
+            });
+            let allData = [];
+            for (let i = 0; i < this.state.books.length; i++) {
+                let data = {};
+                data.userId = JSON.parse(this.state.user).userId;
+                data.bookId = this.state.books[i].bookId;
+                data.bookNum = this.state.books[i].num;
+                allData.push(data);
+            }
+            orderService.changeBookNums(allData);
+            this.setState({ visible: false, _visible: true });
+        }
     }
 
     handleCancel = () => {

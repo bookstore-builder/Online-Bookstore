@@ -80,7 +80,12 @@ export const activateUser = (userId) => {
     const data = {userId: userId};
     const url = `${config.apiUrl}/activateUser`;
     const callback = (data) => {
-        
+        if (data.code === 200) {
+            message.success(data.message);
+        }
+        else{
+            message.error(data.message);
+        }
     };
     postRequest_v2(url, data, callback);
 }
@@ -89,7 +94,12 @@ export const banUser = (userId) => {
     const data = {userId: userId};
     const url = `${config.apiUrl}/banUser`;
     const callback = (data) => {
-        
+        if (data.code === 200) {
+            message.success(data.message);
+        }
+        else{
+            message.error(data.message);
+        }
     };
     postRequest_v2(url, data, callback);
 }

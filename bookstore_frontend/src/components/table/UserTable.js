@@ -114,7 +114,6 @@ export class UserTable extends React.Component {
         }
         else{
           userService.activateUser(this.state.data[product].userId);
-          message.success("已激活该用户");
         }
         break;
       }
@@ -129,7 +128,6 @@ export class UserTable extends React.Component {
         }
         else{
           userService.banUser(this.state.data[product].userId);
-          message.success("已禁用该用户");
         }
         break;
       }

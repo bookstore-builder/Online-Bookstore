@@ -53,7 +53,6 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    @Cacheable(value = "book", key = "'id-' + #p0.bookId")
     public Msg addBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
         if (searchBook != null) {
@@ -80,7 +79,6 @@ public class BookDaoImpl implements BookDao {
     public Book searchBook(String key) { return bookRepository.getBookByName(key); }
 
     @Override
-    @CachePut(value = "book", key = "'id-' + #p0.bookId")
     public Msg updateBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
         if (searchBook == null) {
