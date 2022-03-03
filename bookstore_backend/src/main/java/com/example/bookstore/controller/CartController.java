@@ -44,7 +44,6 @@ public class CartController {
 
     @RequestMapping(value = "/deleteCartItems")
     public Msg deleteCartItems(@RequestParam("userId") Integer userId, @RequestParam("books") List<Integer> books) {
-        // System.out.println(books.get(0));
         return cartService.deleteCartItems(userId, books);
     }
 
