@@ -1,4 +1,3 @@
-import renderEmpty from 'antd/lib/config-provider/renderEmpty';
 import React from 'react';
 import { Descriptions } from 'antd';
 import '../../css/bookdetail.css';

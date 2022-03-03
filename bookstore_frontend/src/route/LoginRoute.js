@@ -12,8 +12,7 @@ export class LoginRoute extends React.Component{
     }
 
     checkAuth = (data) => {
-        console.log(data);
-        if (data.code == 200) {
+        if (data.code === 200) {
             this.setState({isAuthed: true, hasAuthed: true});
         } else {
             localStorage.removeItem('user');
@@ -30,8 +29,6 @@ export class LoginRoute extends React.Component{
     render() {
 
         const {component: Component, path="/",exact=false,strict=false} = this.props;
-
-        console.log(this.state.isAuthed);
 
         if (!this.state.hasAuthed) {
             return null;

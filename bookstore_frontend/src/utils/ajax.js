@@ -1,5 +1,3 @@
-import {message} from 'antd';
-
 let postRequest_v2 = (url, data, callback) => {
     let formData = new FormData();
 
