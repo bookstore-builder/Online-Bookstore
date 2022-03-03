@@ -14,7 +14,7 @@ export default class AdminRoute extends React.Component {
 
     checkAdminAuth = (data) => {
         console.log(data);
-        if (data.code == 200) {
+        if (data.code === 200) {
             this.setState({isAuthed: true, hasAuthed: true});
         } else {
             message.error(data.message);

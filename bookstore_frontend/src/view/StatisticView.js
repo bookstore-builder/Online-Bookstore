@@ -4,27 +4,9 @@ import { Radio } from 'antd'
 import { Navigator } from "../components/home/Navigator"
 import { BookStatisticTable } from "../components/statistic/BookStatisticTable"
 import { BookBarChart, UserPieChart } from "../components/statistic/Charts"
+import moment from 'moment'
 import * as orderService from "../services/orderService"
 import '../css/statistic.css';
-
-Date.prototype.format = function (fmt) {
-    var o = {
-        "M+": this.getMonth() + 1,
-        "d+": this.getDate(),
-        "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12,
-        "H+": this.getHours(),
-        "m+": this.getMinutes(),
-        "s+": this.getSeconds(),
-        "q+": Math.floor((this.getMonth() + 3) / 3),
-        "S": this.getMilliseconds()
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
-}
 
 class StatisticView extends React.Component {
     state = {
@@ -52,9 +34,11 @@ class StatisticView extends React.Component {
                 break;
             case 6:
                 value = 3650;
+                break;
+            default:
+                break;
         }
-        var d2 = new Date();
-        var time = new Date(d2.getTime() - value * 24 * 3600 * 1000).format("yyyy/MM/dd");
+        var time = moment().subtract(value, 'days').format("YYYY/MM/DD");
 
         orderService.getUserBookStatistic(this.state.userId, time, (data) => {
             let bookNum = [];
