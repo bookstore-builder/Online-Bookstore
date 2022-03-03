@@ -91,7 +91,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1','1', '奔雷少年', null, null, 'thunderboy@sjtu.edu.cn', 0, null, null, 1, "2021/03/07");
-
+INSERT INTO `user` VALUES ('2','2', 'xx', null, null, '1532383784@qq.com', 0, null, null, 1, "2001/08/27");
 -- ----------------------------
 -- Table structure for user_auth
 -- ----------------------------
@@ -109,6 +109,7 @@ CREATE TABLE `user_auth` (
 -- Records of user_auth
 -- ----------------------------
 INSERT INTO `user_auth` VALUES (1, 'thunderboy', 'reins1409', 0, 'thunderboy@sjtu.edu.cn');
+INSERT INTO `user_auth` VALUES (2, 'xx', '12345678', 1, '1532383784@qq.com')
 
 -- ----------------------------
 -- Table structure for cart_item

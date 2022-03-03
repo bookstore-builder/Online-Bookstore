@@ -71,6 +71,7 @@ class CartView extends React.Component {
             allData.push(data);
         }
         orderService.changeBookNums(allData);
+        console.log(allData);
         this.setState({ visible: false, _visible: true });
     }
 

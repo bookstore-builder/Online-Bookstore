@@ -8,6 +8,7 @@ import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.utils.msgutils.Msg;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -48,23 +49,23 @@ public class OrderDaoImpl implements OrderDao{
             return Msg.success(null,"已加入订单");
     }
 
-    public Msg changeBooksNum(List<Map<String, Integer>> books) {
+    public Msg changeBooksNum(JSONObject orderarg) {
         Order order = new Order();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String time = df.format(new Date());
         order.setTime(time);
-        Integer userId = books.get(0).get("userId");
+        Integer userId = orderarg.getInt("userId");
         UserAuth userAuth = userAuthRepository.findByUserId(userId);
         order.setUserAuth(userAuth);
         orderRepository.save(order);
         userAuth.addItem(order);
         userAuthRepository.save(userAuth);
-
-        for(Map<String, Integer> cur: books){
-            Integer bookId = cur.get("bookId");
-            Integer bookNum = cur.get("bookNum");
+        orderarg.getJSONArray("books").forEach(cur-> {
+            JSONObject obj = JSONObject.fromObject(cur);
+            Integer bookId = obj.getInt("bookId");
+            Integer bookNum = obj.getInt("bookNum");
             addItem(bookId, bookNum, order.getOrderId());
-        }
+        });
         return Msg.success(null,"已加入订单");
     }
 

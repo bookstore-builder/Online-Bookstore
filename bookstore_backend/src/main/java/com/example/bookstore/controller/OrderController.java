@@ -1,11 +1,16 @@
 package com.example.bookstore.controller;
 
+import com.example.bookstore.activemq.QueueProducer;
 import com.example.bookstore.dto.BookStatisticResult;
 import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.service.OrderService;
 import com.example.bookstore.utils.msgutils.Msg;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +23,9 @@ public class OrderController {
 
     @Autowired
     private  OrderService orderService;
+
+    QueueProducer orderProducer = new QueueProducer("order");
+    private static final Logger LOG = LoggerFactory.getLogger(OrderController.class);
 
     @RequestMapping(value = "/getOrderBooks")
     public List<OrderResult> getOrderBooks(@RequestParam("userId") Integer id) { return orderService.getOrderBooks(id); }
@@ -33,8 +41,20 @@ public class OrderController {
     }
 
     @RequestMapping(value = "/changeOrderNums")
-    public Msg changeBooksNum(@RequestBody List<Map<String, Integer>> books){
-        return orderService.changeBooksNum(books);
+    public Msg changeBooksNum(@RequestBody List<Map<String, Integer>> orderarg){
+        JSONObject order = new JSONObject();
+        order.put("userId", orderarg.get(0).get("userId"));
+        JSONArray books = new JSONArray();
+        for(Map<String, Integer>cur : orderarg) {
+            JSONObject book = new JSONObject();
+            book.put("bookId", cur.get("bookId"));
+            book.put("bookNum", cur.get("bookNum"));
+            books.add(book);
+        }
+        order.put("books", books);
+        System.out.println(order);
+        orderProducer.sendMsg(order);
+        return Msg.success(null, "订单正在处理");
     }
 
     @RequestMapping(value = "/getBookSale")
