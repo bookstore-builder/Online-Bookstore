@@ -64,9 +64,7 @@ public class BookController {
 
     @RequestMapping(value = "/addViewsCount")
     public Long addViewsCount() {
-        redisUtil.addViewsRecord();
-        Long view_counts = redisUtil.getViewsRecord();
-        log.info("总用户访问量："+ view_counts);
+        Long view_counts = redisUtil.addViewsRecord();
         return view_counts;
     }
 }

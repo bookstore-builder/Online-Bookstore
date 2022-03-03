@@ -109,7 +109,7 @@ CREATE TABLE `user_auth` (
 -- Records of user_auth
 -- ----------------------------
 INSERT INTO `user_auth` VALUES (1, 'thunderboy', 'reins1409', 0, 'thunderboy@sjtu.edu.cn');
-INSERT INTO `user_auth` VALUES (2, 'xx', '12345678', 1, '1532383784@qq.com')
+INSERT INTO `user_auth` VALUES (2, 'xx', '12345678', 1, '1532383784@qq.com');
 
 -- ----------------------------
 -- Table structure for cart_item
