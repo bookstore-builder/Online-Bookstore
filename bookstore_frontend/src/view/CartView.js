@@ -78,6 +78,9 @@ class CartView extends React.Component {
             orderService.changeBookNums(allData);
             this.setState({ visible: false, _visible: true });
         }
+        orderService.changeBookNums(allData);
+        console.log(allData);
+        this.setState({ visible: false, _visible: true });
     }
 
     handleCancel = () => {

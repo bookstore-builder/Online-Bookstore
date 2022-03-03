@@ -7,8 +7,11 @@ import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.service.OrderService;
 import com.example.bookstore.utils.msgutils.Msg;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -37,8 +40,8 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<Integer> getBookSale(Integer bookId, String time) { return orderDao.getBookSale(bookId, time); }
 
-    @Override
-    public Msg changeBooksNum(List<Map<String, Integer>> books) { return orderDao.changeBooksNum(books); }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Msg changeBooksNum(JSONObject order) { return orderDao.changeBooksNum(order); }
 
     @Override
     public List<BookStatisticResult> getBookStatistic(String time) { return orderDao.getBookStatistic(time); }
