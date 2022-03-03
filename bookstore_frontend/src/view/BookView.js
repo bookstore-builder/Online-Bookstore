@@ -4,11 +4,13 @@ import { Icon, Button, Modal, InputNumber, Input, message } from 'antd';
 import { Navigator } from '../components/home/Navigator';
 import { BookDetail } from '../components/book/BookDetail';
 import { Booklist } from '../components/book/Booklist';
+import { CommentList } from '../components/book/CommentList';
 import { LineChart } from '../components/statistic/Charts'
 import { getBook, getSimilarBooks } from '../services/bookService';
 import { getBookSale } from "../services/orderService";
 import * as cartService from '../services/cartService';
 import * as orderService from '../services/orderService';
+import * as commentService from '../services/commentService';
 import '../css/bookdetail.css';
 
 Date.prototype.format = function (fmt) {
@@ -34,6 +36,12 @@ class BookView extends React.Component {
 
     constructor(props) {
         super(props);
+        let user = localStorage.getItem("user");
+        let userId = JSON.parse(user).userId;
+        let userName = JSON.parse(user).username;
+        let query = this.props.location.search;
+        let arr = query.split('&');
+        let bookId = arr[0].substr(4);
         this.state = {
             visible: false,
             _visible: false,
@@ -51,17 +59,19 @@ class BookView extends React.Component {
                 current: 0,
                 pageSize: 16,
             },
+            comments: [],
+            user: user,
+            userId: userId,
+            userName: userName,
+            bookId: bookId,
         }
     }
 
     componentDidMount(){
         const { pagination } = this.state;
-        let user = localStorage.getItem("user");
-        this.setState({user:user});
         const query = this.props.location.search;
         const arr = query.split('&');
         const bookId = arr[0].substr(4);
-        this.setState({bookId: bookId});
         getBook(bookId, (data) => {
             this.setState({bookInfo: data});
             getSimilarBooks(data.type, pagination.current, pagination.pageSize,
@@ -76,7 +86,7 @@ class BookView extends React.Component {
                 chartData: data
             });
         });
-    }
+    }   
 
     handleNumber = (value) => {
         this.setState({
@@ -231,6 +241,9 @@ class BookView extends React.Component {
                         </span>
                         <p/>
                     </Modal>
+                    </div>
+                    <div style={{ width: "670px", marginLeft: "20px" }}>
+                        <CommentList bookId={this.state.bookId} userId={this.state.userId} userName={this.state.userName}/>
                     </div>
                     <h1 style={{ marginLeft: "30px" }}>类似书籍</h1>
                     <Booklist 

@@ -160,6 +160,20 @@ CREATE TABLE `orders` (
   FOREIGN KEY (`user_id`) REFERENCES `user_auth` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- ----------------------------
+-- Table structure for comment_item
+-- ----------------------------
+DROP TABLE IF EXISTS `comment_item`;
+CREATE TABLE `comment_item` (
+  `comment_id` int NOT NULL AUTO_INCREMENT,
+  `book_id` int DEFAULT NULL,
+  `user_id` int DEFAULT NULL,
+  `time` varchar(255) DEFAULT NULL,
+  `comment` varchar(510) DEFAULT NULL,
+  PRIMARY KEY (`comment_id`),
+  FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 
