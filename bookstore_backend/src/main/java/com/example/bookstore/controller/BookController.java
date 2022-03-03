@@ -19,7 +19,6 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 public class BookController {
-    private final String VIEWS_TOPIC = "/topic/views-count";
     private final RedisUtil redisUtil;
 
     @Autowired

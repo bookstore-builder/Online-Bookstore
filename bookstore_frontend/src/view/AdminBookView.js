@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import { Navigator } from '../components/home/Navigator';
 import { BookSideBar } from '../components/sidebar/BookSidebar';
 import { BookDetail } from '../components/book/BookDetail';
+import { CommentList } from '../components/book/CommentList';
 import { EditBookDetail } from '../components/book/EditBookDetail';
 import { LineChart } from '../components/statistic/Charts'
 import { withRouter } from "react-router-dom";
@@ -44,6 +45,12 @@ Date.prototype.format = function (fmt) {
 class AdminBookView extends React.Component {
     constructor(props) {
         super(props);
+        let user = localStorage.getItem("user");
+        let userId = JSON.parse(user).userId;
+        let userName = JSON.parse(user).username;
+        let query = this.props.location.search;
+        let arr = query.split('&');
+        let bookId = arr[0].substr(4);
         this.state = {
             flag: false,
             info: info,
@@ -55,6 +62,9 @@ class AdminBookView extends React.Component {
                 current: 0,
                 pageSize: 12,
             },
+            userId: userId,
+            userName: userName,
+            bookId: bookId,
         };
     }
 
@@ -216,6 +226,9 @@ class AdminBookView extends React.Component {
                             <Button type="primary" onClick={this.onSave} icon="save" style={{ marginLeft: "20px", background: "#46A3FF", border: "none" }}>
                                 保存
                             </Button>
+                        </div>
+                        <div style={{ width: "600px", marginLeft: "20px", float: "left" }}>
+                            <CommentList userId={this.state.userId} userName={this.state.userName} bookId={this.state.bookId}/>
                         </div>
                         <div className="Clear"></div>
                     </div>
