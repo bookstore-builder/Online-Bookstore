@@ -106,6 +106,8 @@ export class Profile extends React.Component {
                         address: e.target.value,
                     });
                     break;
+                default:
+                    break;
             }
         }
     }

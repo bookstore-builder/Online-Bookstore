@@ -1,32 +1,13 @@
 import React from 'react'
-import { Input, Radio, Divider } from 'antd'
+import { Radio } from 'antd'
 import { withRouter } from "react-router-dom";
 import { Navigator } from "../components/home/Navigator"
 import { BookStatisticTable } from "../components/statistic/BookStatisticTable"
 import { UserStatisticTable } from "../components/statistic/UserStatisticTable"
 import { BookBarChart, UserBarChart } from "../components/statistic/Charts";
+import moment from 'moment';
 import * as orderService from "../services/orderService";
 import '../css/statistic.css';
-
-Date.prototype.format = function(fmt) 
-{ 
-　　var o = { 
-　　　　"M+" : this.getMonth()+1, 
-　　　　"d+" : this.getDate(),  
-　　　　"h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, 
-　　　　"H+" : this.getHours(), 
-　　　　"m+" : this.getMinutes(), 
-　　　　"s+" : this.getSeconds(), 
-　　　　"q+" : Math.floor((this.getMonth()+3)/3), 
-　　　　"S" : this.getMilliseconds() 
-　　}; 
-　　if(/(y+)/.test(fmt)) 
-　　　　fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
-　　for(var k in o) 
-　　　　if(new RegExp("("+ k +")").test(fmt)) 
-　　fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length))); 
-　　return fmt; 
-} 
 
 class AdminStatisticView extends React.Component {
     state={
@@ -55,10 +36,11 @@ class AdminStatisticView extends React.Component {
                 break;
             case 6:
                 value = 3650;
+                break;
+            default:
+                break;
         }
-        var d2 = new Date();
-        var time = new Date(d2.getTime() - value * 24 * 3600 * 1000).format("yyyy/MM/dd");
-        // console.log(time);
+        var time = moment().subtract(value, 'days').format("YYYY/MM/DD");
         orderService.getBookStatistic(time, (data) => {
             let bookNum = [];
             let bookName = [];
@@ -69,7 +51,6 @@ class AdminStatisticView extends React.Component {
             let bookChartData = {};
             bookChartData.num = bookNum;
             bookChartData.name = bookName;
-            // console.log(bookChartData);
             this.setState({bookData: data, bookChartData: bookChartData});
         });
     }
@@ -93,11 +74,12 @@ class AdminStatisticView extends React.Component {
                 break;
             case 6:
                 value = 3650;
+                break;
+            default:
+                break;
         }
-        var d2 = new Date();
-        var time = new Date(d2.getTime() - value * 24 * 3600 * 1000).format("yyyy/MM/dd");
+        var time = moment().subtract(value, 'days').format("YYYY/MM/DD");
         console.log(time);
-        // console.log(time);
         orderService.getUserStatistic(time, (data) => {
             let bookNum = [];
             let userName = [];

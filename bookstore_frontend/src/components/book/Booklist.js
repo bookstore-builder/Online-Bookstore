@@ -1,7 +1,6 @@
 import React from 'react';
 import {List} from 'antd'
 import {Book} from './Book'
-import * as bookService from "../../services/bookService"
 
 export class Booklist extends React.Component{
     constructor(props) {

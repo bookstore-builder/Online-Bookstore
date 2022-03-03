@@ -39,7 +39,7 @@ export class Navigator extends React.Component {
         let user = localStorage.getItem("user");
         let userType = JSON.parse(user).userType;
 
-        if(userType == 1){
+        if(userType === 1){
             return (
                 <div className="top">
                     <Link className="logo" to="/">

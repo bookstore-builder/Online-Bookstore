@@ -11,7 +11,7 @@ class RegisterForm extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if(!err) {
-                if(values.password != values._password){
+                if(values.password !== values._password){
                     message.error("密码不一致！");
                 }
                 else{

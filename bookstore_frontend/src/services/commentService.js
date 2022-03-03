@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import config from 'config';
-import { postRequest, postRequest_v2} from '../utils/ajax';
+import { postRequest_v2} from '../utils/ajax';
 
 export const getBookComments = (bookId, callback) => {
     const data = {bookId: parseInt(bookId)};
@@ -12,7 +12,7 @@ export const addCommentItem = (bookId, userId, comment, time) => {
     const data = {bookId: parseInt(bookId), userId: userId, comment: comment, time: time};
     const url = `${config.apiUrl}/addComment`;
     const callback = (data) => {
-        if(data.code == 200) {
+        if(data.code === 200) {
             message.success(data.message);
         }else{
             message.error(data.message);

@@ -14,7 +14,7 @@ export default class PrivateRoute extends React.Component{
 
     checkAuth = (data) => {
         console.log(data);
-        if (data.code == 200) {
+        if (data.code === 200) {
             this.setState({isAuthed: true, hasAuthed: true});
         } else {
             message.error(data.message);

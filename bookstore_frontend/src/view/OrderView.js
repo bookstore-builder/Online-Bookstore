@@ -1,13 +1,10 @@
 import React from 'react'
 import { withRouter } from "react-router-dom";
-import { Button, Icon, Input } from 'antd'
+import { Button, Icon } from 'antd'
 import { OrderTable } from "../components/table/OrderTable"
 import { Navigator } from "../components/home/Navigator"
 import {history} from "../utils/history";
-import * as orderService from "../services/orderService"
 import "../css/order.css"
-
-const { Search } = Input;
 
 class OrderView extends React.Component {
     toAnalyze = () => {
