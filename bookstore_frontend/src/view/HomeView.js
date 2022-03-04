@@ -33,7 +33,7 @@ class HomeView extends React.Component {
 
     componentDidMount() {
         const { pagination } = this.state;
-        bookService.addViewsCount({"search":null}, (data)=>{console.log("当前访问量："+data);});
+        bookService.addViewsCount({"search":null}, (data)=>{});
         bookService.getBookPage(pagination.current, pagination.pageSize,
             (data) => {
                 this.setState({books: data.objectList, 

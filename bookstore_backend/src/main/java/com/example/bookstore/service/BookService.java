@@ -4,6 +4,7 @@ import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.utils.msgutils.Msg;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;

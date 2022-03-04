@@ -7,11 +7,6 @@ export const addViewsCount = (data, callback) => {
     postRequest(url, data, callback);
 }
 
-export const getBooks = (data, callback) => {
-    const url = `${config.apiUrl}/getBooks`;
-    postRequest(url, data, callback);
-};
-
 export const getBookPage = (pageNum, pageSize, callback) => {
     const data = {pageNum: pageNum, pageSize: pageSize};
     const url = `${config.apiUrl}/getBookPage`;

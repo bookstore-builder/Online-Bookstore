@@ -9,8 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 
 import java.util.List;
 import java.util.Map;
@@ -64,9 +62,7 @@ public class BookController {
 
     @RequestMapping(value = "/addViewsCount")
     public Long addViewsCount() {
-        redisUtil.addViewsRecord();
-        Long view_counts = redisUtil.getViewsRecord();
-        log.info("总用户访问量："+ view_counts);
+        Long view_counts = redisUtil.addViewsRecord();
         return view_counts;
     }
 }

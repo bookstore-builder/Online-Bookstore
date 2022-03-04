@@ -1,9 +1,6 @@
 package com.example.bookstore.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -33,6 +30,7 @@ public class Book {
     private Integer inventory;
     private String image;
 
+    @JsonIgnore
     @JsonManagedReference(value = "commentReference")
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
             targetEntity = CommentItem.class, mappedBy = "book", fetch = FetchType.EAGER)

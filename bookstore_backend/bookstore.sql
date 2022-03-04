@@ -109,7 +109,7 @@ CREATE TABLE `user_auth` (
 -- Records of user_auth
 -- ----------------------------
 INSERT INTO `user_auth` VALUES (1, 'thunderboy', 'reins1409', 0, 'thunderboy@sjtu.edu.cn');
-INSERT INTO `user_auth` VALUES (2, 'xx', '12345678', 1, '1532383784@qq.com')
+INSERT INTO `user_auth` VALUES (2, 'xx', '12345678', 1, '1532383784@qq.com');
 
 -- ----------------------------
 -- Table structure for cart_item
@@ -121,8 +121,7 @@ CREATE TABLE `cart_item` (
   `book_num` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   `time` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`item_id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user_cart` (`id`)
+  PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
@@ -145,8 +144,7 @@ CREATE TABLE `order_item` (
   `order_id` int DEFAULT NULL,
   `book_id` int DEFAULT NULL,
   `book_num` int DEFAULT NULL,
-  PRIMARY KEY (`item_id`),
-  FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`)
+  PRIMARY KEY (`item_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
@@ -171,8 +169,7 @@ CREATE TABLE `comment_item` (
   `user_id` int DEFAULT NULL,
   `time` varchar(255) DEFAULT NULL,
   `comment` varchar(510) DEFAULT NULL,
-  PRIMARY KEY (`comment_id`),
-  FOREIGN KEY (`book_id`) REFERENCES `book` (`id`)
+  PRIMARY KEY (`comment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
