@@ -62,21 +62,30 @@ class CartView extends React.Component {
             this.setState({ visible: false });
         }
         else{
-            cartService.deleteCartItems(userId, this.state.selectedBooks, (data) => {
-                if (data.code === 200) {
-                    message.success(data.message);
+            if (this.state.name === '')
+                message.error("请输入名称！")
+            else if (this.state.telephone === '')
+                message.error("请输入电话！")
+            else if (this.state.address === '')
+                message.error("请输入地址！")
+            else {
+                cartService.deleteCartItems(userId, this.state.selectedBooks, (data) => {
+                    if (data.code === 200) {
+                        message.success(data.message);
+                    }
+                    cartService.getCartItems(userId, (data) => { this.setState({ data: data }); });
+                });
+                let allData = [];
+                for (let i = 0; i < this.state.books.length; i++) {
+                    let data = {};
+                    data.userId = JSON.parse(this.state.user).userId;
+                    data.bookId = this.state.books[i].bookId;
+                    data.bookNum = this.state.books[i].num;
+                    allData.push(data);
                 }
-            });
-            let allData = [];
-            for (let i = 0; i < this.state.books.length; i++) {
-                let data = {};
-                data.userId = JSON.parse(this.state.user).userId;
-                data.bookId = this.state.books[i].bookId;
-                data.bookNum = this.state.books[i].num;
-                allData.push(data);
+                orderService.changeBookNums(allData);
+                this.setState({ visible: false, _visible: true });
             }
-            orderService.changeBookNums(allData);
-            this.setState({ visible: false, _visible: true });
         }
     }
 
