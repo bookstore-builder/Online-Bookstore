@@ -2,13 +2,31 @@ import { message } from 'antd';
 import config from 'config';
 import {postRequest, postRequest_v2} from "../utils/ajax";
 
-export const getBooks = (data, callback) => {
-    const url = `${config.apiUrl}/getBooks`;
+export const addViewsCount = (data, callback) => {
+    const url = `${config.apiUrl}/addViewsCount`;
     postRequest(url, data, callback);
-};
+}
 
-export const getSimilarBooks = (type, callback) => {
-    const data = {type: type};
+export const getBookPage = (pageNum, pageSize, callback) => {
+    const data = {pageNum: pageNum, pageSize: pageSize};
+    const url = `${config.apiUrl}/getBookPage`;
+    postRequest_v2(url, data, callback);
+}
+
+export const searchTypeBookPage = (word, type, pageNum, pageSize, callback) => {
+    const data = {word: word, type: type, pageNum: pageNum, pageSize: pageSize};
+    const url = `${config.apiUrl}/searchTypeBookPage`;
+    postRequest_v2(url, data, callback);
+} 
+
+export const searchBookPage = (word, pageNum, pageSize, callback) => {
+    const data = {word: word, pageNum: pageNum, pageSize: pageSize};
+    const url = `${config.apiUrl}/searchBookPage`;
+    postRequest_v2(url, data, callback);
+} 
+
+export const getSimilarBooks = (type, pageNum, pageSize, callback) => {
+    const data = {type: type, pageNum: pageNum, pageSize: pageSize};
     const url = `${config.apiUrl}/getSimilarBooks`;
     postRequest_v2(url, data, callback);
 };

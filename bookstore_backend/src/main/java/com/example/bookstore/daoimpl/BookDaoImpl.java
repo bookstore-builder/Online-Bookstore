@@ -3,8 +3,13 @@ package com.example.bookstore.daoimpl;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.dao.BookDao;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.utils.msgutils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,17 +24,36 @@ public class BookDaoImpl implements BookDao {
     private BookRepository bookRepository;
 
     @Override
+    @Cacheable(value = "book", key = "'id-' + #p0")
     public Book getBook(Integer id){
         return bookRepository.getBookByBookId(id);
     }
 
     @Override
-    public List<Book> getBooks() { return bookRepository.getBooks(); }
+    @Cacheable(value = "book-all", key = "#p0.pageNumber + '-' + #p0.pageSize")
+    public DataPage<Book> getBooks(Pageable pageable) {
+        return new DataPage<>(bookRepository.getBooks(pageable));
+    }
 
     @Override
-    public List<Book> getSimilarBooks(String type) { return bookRepository.getSimilarBooks(type); }
+    public DataPage<Book> searchTypeBooks(String word, String type, Pageable pageable) {
+        return new DataPage<>(bookRepository.searchTypeBooks(word, type, pageable));
+    }
 
     @Override
+    @Cacheable(value = "book-name", key = "#p0 + '-' + #p1.pageNumber + '-' + #p1.pageSize")
+    public DataPage<Book> searchBooks(String word, Pageable pageable) {
+        return new DataPage<>(bookRepository.searchBooks(word, pageable));
+    }
+
+    @Override
+    @Cacheable(value = "book-type", key = "#p0 + '-' + #p1.pageNumber + '-' + #p1.pageSize")
+    public DataPage<Book> getSimilarBooks(String type, Pageable pageable) {
+        return new DataPage<>(bookRepository.getSimilarBooks(type, pageable));
+    }
+
+    @Override
+    @CacheEvict(cacheNames = {"book-all", "book-name", "book-type"}, allEntries = true)
     public Msg addBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
         if (searchBook != null) {
@@ -41,6 +65,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    @CacheEvict(cacheNames = {"book-all", "book-name", "book-type", "book"}, allEntries = true)
     public Msg deleteBook(Integer id) {
         Book searchBook = bookRepository.getBookByBookId(id);
         if (searchBook != null) {
@@ -55,6 +80,7 @@ public class BookDaoImpl implements BookDao {
     public Book searchBook(String key) { return bookRepository.getBookByName(key); }
 
     @Override
+    @CacheEvict(cacheNames = {"book-all", "book-name", "book-type", "book"}, allEntries = true)
     public Msg updateBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
         if (searchBook == null) {

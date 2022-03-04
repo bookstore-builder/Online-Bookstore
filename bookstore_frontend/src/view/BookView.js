@@ -4,36 +4,25 @@ import { Icon, Button, Modal, InputNumber, Input, message } from 'antd';
 import { Navigator } from '../components/home/Navigator';
 import { BookDetail } from '../components/book/BookDetail';
 import { Booklist } from '../components/book/Booklist';
+import { CommentList } from '../components/book/CommentList';
 import { LineChart } from '../components/statistic/Charts'
 import { getBook, getSimilarBooks } from '../services/bookService';
 import { getBookSale } from "../services/orderService";
+import moment from 'moment';
 import * as cartService from '../services/cartService';
 import * as orderService from '../services/orderService';
 import '../css/bookdetail.css';
-
-Date.prototype.format = function (fmt) {
-    var o = {
-        "M+": this.getMonth() + 1,
-        "d+": this.getDate(),
-        "h+": this.getHours() % 12 == 0 ? 12 : this.getHours() % 12,
-        "H+": this.getHours(),
-        "m+": this.getMinutes(),
-        "s+": this.getSeconds(),
-        "q+": Math.floor((this.getMonth() + 3) / 3),
-        "S": this.getMilliseconds()
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-    for (var k in o)
-        if (new RegExp("(" + k + ")").test(fmt))
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-    return fmt;
-}
 
 class BookView extends React.Component {
 
     constructor(props) {
         super(props);
+        let user = localStorage.getItem("user");
+        let userId = JSON.parse(user).userId;
+        let userName = JSON.parse(user).username;
+        let query = this.props.location.search;
+        let arr = query.split('&');
+        let bookId = arr[0].substr(4);
         this.state = {
             visible: false,
             _visible: false,
@@ -47,29 +36,37 @@ class BookView extends React.Component {
             bookInfo: [],
             similarBooks: [],
             chartData: [],
+            pagination: {
+                current: 0,
+                pageSize: 16,
+            },
+            comments: [],
+            user: user,
+            userId: userId,
+            userName: userName,
+            bookId: bookId,
         }
     }
 
     componentDidMount(){
-        let user = localStorage.getItem("user");
-        this.setState({user:user});
+        const { pagination } = this.state;
         const query = this.props.location.search;
         const arr = query.split('&');
         const bookId = arr[0].substr(4);
-        this.setState({bookId: bookId});
         getBook(bookId, (data) => {
             this.setState({bookInfo: data});
-            getSimilarBooks(data.type, (data) => {
-                this.setState({similarBooks: data});
+            getSimilarBooks(data.type, pagination.current, pagination.pageSize,
+                (data) => {
+                this.setState({similarBooks: data.objectList,
+                pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
             });
         });
-        let date = new Date();
-        getBookSale(bookId, date.format("yyyy/MM/dd"), (data) => {
+        getBookSale(bookId, moment().format("YYYY/MM/DD"), (data) => {
             this.setState({
                 chartData: data
             });
         });
-    }
+    }   
 
     handleNumber = (value) => {
         this.setState({
@@ -121,15 +118,23 @@ class BookView extends React.Component {
     }
 
     _handleOK = () => {
-        let allData = [];
-        let data = {};
-        data.userId = JSON.parse(this.state.user).userId;
-        data.bookId = this.state.bookId;
-        data.bookNum = this.state._number;
-        allData.push(data);
-        orderService.changeBookNums(allData);
-        this.setState({ _visible: false, __visible: true, });
-        message.success("已成功购买!");
+        if (this.state.name === '')
+            message.error("请输入名称！")
+        else if (this.state.telephone === '')
+            message.error("请输入电话！")
+        else if (this.state.address === '')
+            message.error("请输入地址！")
+        else {
+            let allData = [];
+            let data = {};
+            data.userId = JSON.parse(this.state.user).userId;
+            data.bookId = this.state.bookId;
+            data.bookNum = this.state._number;
+            allData.push(data);
+            orderService.changeBookNums(allData);
+            this.setState({ _visible: false, __visible: true, });
+            message.success("已成功购买!");
+        }
     }
 
     _handleCancel = () => {
@@ -142,6 +147,15 @@ class BookView extends React.Component {
 
     __handleCancel = () => {
         this.setState({ __visible:false, });
+    }
+
+    handlePage = (current, pageSize) => {
+        const { bookInfo } = this.state;
+        getSimilarBooks(bookInfo.type, current, pageSize,
+            (data) => {
+            this.setState({similarBooks: data.objectList,
+            pagination: {total: data.total, current: data.currentPage, pageSize: data.pageSize}});
+        });
     }
 
     render() {
@@ -216,9 +230,14 @@ class BookView extends React.Component {
                         <p/>
                     </Modal>
                     </div>
+                    <div style={{ width: "670px", marginLeft: "20px" }}>
+                        <CommentList bookId={this.state.bookId} userId={this.state.userId} userName={this.state.userName}/>
+                    </div>
                     <h1 style={{ marginLeft: "30px" }}>类似书籍</h1>
                     <Booklist 
-                    books={this.state.similarBooks}/>
+                    books={this.state.similarBooks} pagination={this.state.pagination}
+                    handlePage={this.handlePage}
+                    />
                 </div>
             </div>
         )

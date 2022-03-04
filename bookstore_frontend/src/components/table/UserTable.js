@@ -108,13 +108,12 @@ export class UserTable extends React.Component {
 
   activateConfirm = (key) => {
     for (let product in this.state.data) {
-      if(this.state.data[product].key == key){
-        if(this.state.data[product].tags == '正常'){
+      if(this.state.data[product].key === key){
+        if(this.state.data[product].tags === '正常'){
           message.warning("用户已经处于激活态");
         }
         else{
           userService.activateUser(this.state.data[product].userId);
-          message.success("已激活该用户");
         }
         break;
       }
@@ -129,7 +128,6 @@ export class UserTable extends React.Component {
         }
         else{
           userService.banUser(this.state.data[product].userId);
-          message.success("已禁用该用户");
         }
         break;
       }

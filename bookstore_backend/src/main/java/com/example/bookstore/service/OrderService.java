@@ -1,10 +1,11 @@
 package com.example.bookstore.service;
 
 import com.example.bookstore.dto.BookStatisticResult;
-import com.example.bookstore.dto.OrderPage;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.utils.msgutils.Msg;
+import net.sf.json.JSONObject;
 
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,9 @@ public interface OrderService {
 
     List<OrderResult> getAllOrderBooks();
 
-    OrderPage getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId);
+    DataPage<OrderResult> getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId);
 
-    Msg changeBooksNum(List<Map<String, Integer>> books);
+    Msg changeBooksNum(JSONObject order);
 
     List<Integer> getBookSale(Integer bookId, String time);
 

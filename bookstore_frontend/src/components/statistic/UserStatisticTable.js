@@ -1,7 +1,6 @@
 import React from 'react'
-import { Table, Input, Button, Icon, Pagination, Avatar } from 'antd';
+import { Table, Input, Button, Icon, Avatar } from 'antd';
 import Highlighter from 'react-highlight-words'
-import {Link} from 'react-router-dom'
 import head from "../../assets/head.png"
 
 export class UserStatisticTable extends React.Component{

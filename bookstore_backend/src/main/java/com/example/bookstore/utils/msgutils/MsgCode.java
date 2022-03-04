@@ -2,11 +2,11 @@ package  com.example.bookstore.utils.msgutils;
 
 public enum MsgCode {
 
-    SUCCESS(200, "Operation Success"),
-    FAILED(500, "Operation Failed"),
-    VALIDATE_FAILED(404, "Parameter Check Failed"),
-    UNAUTHORIZED(401, "Not Logged In or Token Has Expired"),
-    FORBIDDEN(403, "No Related Permission");
+    SUCCESS(200, "操作成功"),
+    FAILED(500, "操作失败"),
+    VALIDATE_FAILED(404, "参数检查错误"),
+    UNAUTHORIZED(401, "用户未登录"),
+    FORBIDDEN(403, "无相关权限");
 
     private final long code;
     private final String message;

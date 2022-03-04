@@ -1,7 +1,9 @@
 package com.example.bookstore.dao;
 
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.utils.msgutils.Msg;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +11,11 @@ import java.util.Map;
 public interface BookDao {
     Book getBook(Integer id);
 
-    List<Book> getBooks();
+    DataPage<Book> getBooks(Pageable pageable);
+
+    DataPage<Book> searchTypeBooks(String word, String type, Pageable pageable);
+
+    DataPage<Book> searchBooks(String word, Pageable pageable);
 
     Msg addBook(Book book);
 
@@ -19,7 +25,7 @@ public interface BookDao {
 
     Msg updateBook(Book book);
 
-    List<Book> getSimilarBooks(String type);
+    DataPage<Book> getSimilarBooks(String type, Pageable pageable);
 
     List<Map<String, String>> getTopBooks();
 }

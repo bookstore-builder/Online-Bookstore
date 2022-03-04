@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Button, Input, AutoComplete } from 'antd';
+import { Icon, Button, Input } from 'antd';
 import '../../css/searchbar.css';
 
 export class Searchbar extends React.Component {

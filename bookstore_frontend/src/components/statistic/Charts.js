@@ -1,49 +1,6 @@
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
 
-const lineOptions = {
-  title: {
-    text: '近几日销量曲线',
-  },
-  tooltip: {
-    trigger: 'axis'
-  },
-  legend: {
-    data: ['销量']
-  },
-  toolbox: {
-    show: true,
-  },
-  xAxis: {
-    type: 'category',
-    boundaryGap: false,
-    data: ['-6天', '-5天', '-4天', '-3天', '-2天', '-1天', '0天']
-  },
-  yAxis: {
-    type: 'value',
-    axisLabel: {
-      formatter: '{value}'
-    }
-  },
-  series: [
-    {
-      name: '销量',
-      type: 'line',
-      data: [5, 20, 26, 50, 30, 13, 19],
-      markPoint: {
-        data: [
-          { type: 'max', name: '最大值' },
-        ]
-      },
-      markLine: {
-        data: [
-          { type: 'average', name: '平均值' }
-        ]
-      }
-    },
-  ]
-};
-
 export class LineChart extends React.Component {
 
   getOption = () => {

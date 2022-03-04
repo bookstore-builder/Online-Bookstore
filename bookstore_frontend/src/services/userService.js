@@ -25,7 +25,7 @@ export const login = (data) => {
 export const signup = (data) => {
     const url = `${config.apiUrl}/signup`;
     const callback = (data) => {
-        if(data.code == 200) {
+        if(data.code === 200) {
             localStorage.setItem('user', JSON.stringify(data.data));
             history.push("/");
             message.success("登录成功！");
@@ -41,7 +41,7 @@ export const logout = () => {
     const url = `${config.apiUrl}/logout`;
 
     const callback = (data) => {
-        if(data.code == 200) {
+        if(data.code === 200) {
             localStorage.removeItem("user");
             history.push("/login");
             message.success(data.message);
@@ -66,7 +66,7 @@ export const checkAdminSession = (callback) => {
 export const updateUser = (data) => {
     const url = `${config.apiUrl}/updateUser`;
     const callback = (data) => {
-        if(data.code == 200) {
+        if(data.code === 200) {
             message.success(data.message);
         }
         else{
@@ -80,7 +80,12 @@ export const activateUser = (userId) => {
     const data = {userId: userId};
     const url = `${config.apiUrl}/activateUser`;
     const callback = (data) => {
-        
+        if (data.code === 200) {
+            message.success(data.message);
+        }
+        else{
+            message.error(data.message);
+        }
     };
     postRequest_v2(url, data, callback);
 }
@@ -89,7 +94,12 @@ export const banUser = (userId) => {
     const data = {userId: userId};
     const url = `${config.apiUrl}/banUser`;
     const callback = (data) => {
-        
+        if (data.code === 200) {
+            message.success(data.message);
+        }
+        else{
+            message.error(data.message);
+        }
     };
     postRequest_v2(url, data, callback);
 }
@@ -104,7 +114,7 @@ export const checkUserName = (userName) => {
     const url = `${config.apiUrl}/checkUserName`;
     const data = {userName: userName};
     const callback = (data) => {
-        if(data.code == 200){
+        if(data.code === 200){
         }
         else{
             message.error(data.message);

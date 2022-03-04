@@ -5,7 +5,13 @@ import {Book} from './Book'
 export class Booklist extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {books: []};
+        this.state = {
+            books: [],
+            pagination: {
+                current: 1,
+                pageSize: 10,
+            },
+        };
     }
 
     render() {
@@ -15,10 +21,12 @@ export class Booklist extends React.Component{
                 grid={{gutter: 10, column: 4}}
                 dataSource={this.props.books}
                 pagination={{
-                    onChange: page => {
-                        console.log(page);
+                    onChange: (current, pageSize) => {
+                        this.props.handlePage(current-1, pageSize);
                     },
-                    pageSize: 16,
+                    current: this.props.pagination.current+1,
+                    pageSize: this.props.pagination.pageSize,
+                    total: this.props.pagination.total,
                 }}
 
                 renderItem={item => (

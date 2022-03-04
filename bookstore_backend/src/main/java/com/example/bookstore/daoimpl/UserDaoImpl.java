@@ -78,7 +78,7 @@ public class UserDaoImpl implements UserDao{
     public List<UserResult> getAllUser() {
         List<UserResult> userResults = new ArrayList<>();
         Integer key = 0;
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllCustomers();
         for(User user: users) {
             UserResult userResult = new UserResult();
             key++;

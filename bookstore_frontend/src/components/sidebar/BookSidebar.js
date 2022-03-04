@@ -21,21 +21,29 @@ export class BookSideBar extends React.Component {
     render() {
         return (
             <div className="sidebar">
-                <Search placeholder="input book name" allowClear style={{ width: 183 }} onPressEnter={this.handleSearch} />
+                <Search placeholder="input book name" allowClear style={{ width: 190 }} onPressEnter={this.handleSearch} />
                 <List
-                    header={<div style={{ marginLeft: "21px", fontSize: "20px", fontWeight: "bold" }}>书库
+                    header={<div style={{ marginLeft: "21px", fontSize: "18px", fontWeight: "bold" }}>书库
                     <BookForm/>
                     </div>}
                     bordered
                     dataSource={this.props.data}
-                    pagination={{simple: true, size: "small", marginRight:"5px"}}
+                    pagination={{
+                        simple: true, size: "small", marginRight:"10px",
+                        onChange: (current, pageSize) => {
+                            this.props.handlePage(current-1, pageSize);
+                        },
+                        current: this.props.pagination.current+1,
+                        pageSize: this.props.pagination.pageSize,
+                        total: this.props.pagination.total,
+                    }}
                     renderItem={item => {
                         return (
                             <List.Item>
                                 <span>
                                     <Link to={{
                                         pathname: '/bookManage',
-                                        search: '?id=' + item.id
+                                        search: '?id=' + item.bookId
                                     }}
                                         target="_blank"
                                     >

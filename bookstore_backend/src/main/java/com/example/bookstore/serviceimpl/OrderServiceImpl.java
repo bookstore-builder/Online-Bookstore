@@ -2,13 +2,16 @@ package com.example.bookstore.serviceimpl;
 
 import com.example.bookstore.dao.OrderDao;
 import com.example.bookstore.dto.BookStatisticResult;
-import com.example.bookstore.dto.OrderPage;
+import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.dto.UserStatisticResult;
 import com.example.bookstore.service.OrderService;
 import com.example.bookstore.utils.msgutils.Msg;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +32,7 @@ public class OrderServiceImpl implements OrderService{
     public List<OrderResult> getAllOrderBooks() { return orderDao.getAllOrderBooks(); }
 
     @Override
-    public OrderPage getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId)
+    public DataPage<OrderResult> getOrderPage(Integer pageNum, Integer pageSize, String search, String time, Integer userId)
     {
         return orderDao.getOrderPage(pageNum, pageSize, search, time, userId);
     }
@@ -37,8 +40,8 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public List<Integer> getBookSale(Integer bookId, String time) { return orderDao.getBookSale(bookId, time); }
 
-    @Override
-    public Msg changeBooksNum(List<Map<String, Integer>> books) { return orderDao.changeBooksNum(books); }
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Msg changeBooksNum(JSONObject order) { return orderDao.changeBooksNum(order); }
 
     @Override
     public List<BookStatisticResult> getBookStatistic(String time) { return orderDao.getBookStatistic(time); }
