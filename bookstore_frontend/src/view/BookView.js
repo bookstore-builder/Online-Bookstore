@@ -118,15 +118,23 @@ class BookView extends React.Component {
     }
 
     _handleOK = () => {
-        let allData = [];
-        let data = {};
-        data.userId = JSON.parse(this.state.user).userId;
-        data.bookId = this.state.bookId;
-        data.bookNum = this.state._number;
-        allData.push(data);
-        orderService.changeBookNums(allData);
-        this.setState({ _visible: false, __visible: true, });
-        message.success("已成功购买!");
+        if (this.state.name === '')
+            message.error("请输入名称！")
+        else if (this.state.telephone === '')
+            message.error("请输入电话！")
+        else if (this.state.address === '')
+            message.error("请输入地址！")
+        else {
+            let allData = [];
+            let data = {};
+            data.userId = JSON.parse(this.state.user).userId;
+            data.bookId = this.state.bookId;
+            data.bookNum = this.state._number;
+            allData.push(data);
+            orderService.changeBookNums(allData);
+            this.setState({ _visible: false, __visible: true, });
+            message.success("已成功购买!");
+        }
     }
 
     _handleCancel = () => {

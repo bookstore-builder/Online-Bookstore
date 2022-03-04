@@ -53,6 +53,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    @CacheEvict(cacheNames = {"book-all", "book-name", "book-type"}, allEntries = true)
     public Msg addBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
         if (searchBook != null) {
@@ -64,7 +65,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    @CacheEvict(value = "book", key = "'id-' + #p0.bookId")
+    @CacheEvict(cacheNames = {"book-all", "book-name", "book-type", "book"}, allEntries = true)
     public Msg deleteBook(Integer id) {
         Book searchBook = bookRepository.getBookByBookId(id);
         if (searchBook != null) {
@@ -79,6 +80,7 @@ public class BookDaoImpl implements BookDao {
     public Book searchBook(String key) { return bookRepository.getBookByName(key); }
 
     @Override
+    @CacheEvict(cacheNames = {"book-all", "book-name", "book-type", "book"}, allEntries = true)
     public Msg updateBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
         if (searchBook == null) {
