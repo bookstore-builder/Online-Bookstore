@@ -5,8 +5,8 @@ public class ChatMessage extends Message{
     private String receiver;
     private String message;
 
-    public ChatMessage(String sender, String receiver, String message) {
-        this.user = sender;
+    public ChatMessage(String user, String receiver, String message) {
+        this.user = user;
         this.receiver = receiver;
         this.message = message;
     }

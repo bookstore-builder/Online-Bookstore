@@ -27,6 +27,7 @@ public class BotEndPoint {
     @OnOpen
     public void openConnection(Session session) {
         mySession.add(session);
+        session.getUserProperties().put("active", false);
         logger.log(Level.INFO, "Connection opened.");
     }
 
@@ -42,6 +43,7 @@ public class BotEndPoint {
             sendAll(session, new InfoMessage(joinMessage.getUser() + " has joined the chat."));
             sendAll(session, new UsersMessage(this.getUserList(session)));
         } else if (msg instanceof ChatMessage) {
+            System.out.println(msg);
             ChatMessage chatMessage = (ChatMessage) msg;
             session.getUserProperties().put("user", chatMessage.getUser());
             session.getUserProperties().put("receiver", chatMessage.getReceiver());

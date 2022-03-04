@@ -39,7 +39,7 @@ export class Navigator extends React.Component {
         let user = localStorage.getItem("user");
         let userType = JSON.parse(user).userType;
 
-        if(userType === 1){
+        if (userType === 1) {
             return (
                 <div className="top">
                     <Link className="logo" to="/">
@@ -57,12 +57,12 @@ export class Navigator extends React.Component {
                             }}
                                 target="_blank"
                             ><Icon type="read" /></Link></li>
-                            <li><Link 
-                                style={{ fontSize: "15px" }} 
+                            <li><Link
+                                style={{ fontSize: "15px" }}
                                 to={{
-                                pathname: '/bookDetails',
-                                search: '?id=' + 1
-                            }}
+                                    pathname: '/bookDetails',
+                                    search: '?id=' + 1
+                                }}
                                 target="_blank"
                             >书籍</Link></li>
                             <li className="vl"></li>
@@ -72,8 +72,11 @@ export class Navigator extends React.Component {
                             <li><Link to="/statistic"><Icon type="monitor" /></Link></li>
                             <li><Link style={{ fontSize: "15px" }} to="/statistic">统计</Link></li>
                             <li className="vl"></li>
+                            <li><Link to="/chat"><Icon type="message" /></Link></li>
+                            <li><Link style={{ fontSize: "15px" }} to="/chat"> 社区</Link></li>
+                            <li className="vl"></li>
                             <li style={{ fontSize: "15px", marginTop: "-2px" }}>Hi,{this.state.username}!
-                            <Dropdown overlay={menu} placement="bottomRight">
+                                <Dropdown overlay={menu} placement="bottomRight">
                                     <img src={head} className="round_icon_" />
                                 </Dropdown>
                             </li>
@@ -82,7 +85,7 @@ export class Navigator extends React.Component {
                 </div>
             )
         }
-        else{
+        else {
             return (
                 <div className="top">
                     <Link className="logo" to="/">
@@ -100,12 +103,12 @@ export class Navigator extends React.Component {
                             }}
                                 target="_blank"
                             ><Icon type="read" /></Link></li>
-                            <li><Link 
-                            style={{ fontSize: "15px" }} 
-                            to={{
-                                pathname: '/bookManage',
-                                search: '?id=' + 1
-                            }}
+                            <li><Link
+                                style={{ fontSize: "15px" }}
+                                to={{
+                                    pathname: '/bookManage',
+                                    search: '?id=' + 1
+                                }}
                                 target="_blank"
                             >书籍</Link></li>
                             <li className="vl"></li>
@@ -116,7 +119,7 @@ export class Navigator extends React.Component {
                             <li><Link style={{ fontSize: "15px" }} to="/adminStatistic">统计</Link></li>
                             <li className="vl"></li>
                             <li style={{ fontSize: "15px", marginTop: "-2px" }}>Hi,{this.state.username}!
-                            <Dropdown overlay={menu} placement="bottomRight">
+                                <Dropdown overlay={menu} placement="bottomRight">
                                     <img src={head} className="round_icon_" />
                                 </Dropdown>
                             </li>

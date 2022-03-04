@@ -15,6 +15,7 @@ import ProfileView from "./view/ProfileView";
 import UserView from "./view/UserView";
 import AdminStatisticView from './view/AdminStatisticView';
 import StatisticView from './view/StatisticView';
+import ChatView from './view/ChatView';
 
 class BasicRoute extends React.Component{
 
@@ -39,6 +40,7 @@ class BasicRoute extends React.Component{
                     <PrivateRoute exact path="/order" component={OrderView} />
                     <PrivateRoute exact path="/profile" component={ProfileView} />
                     <PrivateRoute exact path="/statistic" component={StatisticView} />
+                    <PrivateRoute exact path="/chat" component={ChatView} />
                     <AdminRoute exact path="/adminStatistic" component={AdminStatisticView} />
                     <AdminRoute exact path="/bookManage" component={AdminBookView} />
                     <AdminRoute exact path="/userManage" component={UserView} />

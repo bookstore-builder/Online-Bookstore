@@ -24,7 +24,7 @@ public class ChatMsgEncoder implements Encoder.Text<ChatMessage> {
         try (JsonGenerator jsonGenerator = Json.createGenerator(stringWriter)) {
             jsonGenerator.writeStartObject()
                     .write("type", "chat")
-                    .write("sender", chatMessage.getUser())
+                    .write("user", chatMessage.getUser())
                     .write("receiver", chatMessage.getReceiver())
                     .write("message", chatMessage.getMessage())
                     .writeEnd();
