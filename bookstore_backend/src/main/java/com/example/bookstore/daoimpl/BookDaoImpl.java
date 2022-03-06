@@ -1,6 +1,9 @@
 package com.example.bookstore.daoimpl;
 
 import com.example.bookstore.entity.Book;
+import com.example.bookstore.fulltextsearch.FilesPositionConfig;
+import com.example.bookstore.fulltextsearch.ReadWriteFiles;
+import com.example.bookstore.fulltextsearch.SearchFiles;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.dao.BookDao;
 import com.example.bookstore.dto.DataPage;
@@ -12,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +64,7 @@ public class BookDaoImpl implements BookDao {
             return Msg.failed("书籍已存在！");
         } else {
             bookRepository.save(book);
+            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getDescription(), true);
             return Msg.success(null, "已添加书籍！");
         }
     }
@@ -95,6 +100,7 @@ public class BookDaoImpl implements BookDao {
             searchBook.setType(book.getType());
             searchBook.setIsbn(book.getIsbn());
             bookRepository.save(searchBook);
+            ReadWriteFiles.create_docs_files(searchBook.getBookId(), searchBook.getName() + searchBook.getDescription(), true);
             return Msg.success(null,"已更新书籍！");
         }
     }
@@ -115,4 +121,26 @@ public class BookDaoImpl implements BookDao {
         return topBookResults;
     }
 
+    @Override
+    public List<Book> fullTextSearchBook(String text) {
+        List<Book> bookList = new ArrayList<>();
+//        for (int i = 1; i < 30; ++i) {
+//            Book book = bookRepository.getBookByBookId(i);
+//            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getDescription(), true);
+//        }
+        try {
+            String[] args = {"-index", FilesPositionConfig.indexPath, "-query", text};
+            List<Integer> bookidList = SearchFiles.search_interface(args);
+            System.out.println(bookidList);
+            for (Integer integer : bookidList) {
+                Book book = bookRepository.getBookByBookId(integer);
+                /* 如果该书没有被删除 */
+               if (book != null) bookList.add(book);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println(bookList);
+        return bookList;
+    }
 }

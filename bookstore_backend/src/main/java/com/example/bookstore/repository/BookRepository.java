@@ -1,6 +1,8 @@
 package com.example.bookstore.repository;
 
 import com.example.bookstore.entity.Book;
+import com.example.bookstore.fulltextsearch.FilesPositionConfig;
+import com.example.bookstore.fulltextsearch.SearchFiles;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -38,4 +41,5 @@ public interface BookRepository extends JpaRepository<Book, Integer> {
     @Modifying
     @Query("delete from Book where bookId = :id")
     void deleteByItemId(Integer id);
+
 }

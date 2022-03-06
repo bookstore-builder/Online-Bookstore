@@ -28,4 +28,6 @@ public interface BookDao {
     DataPage<Book> getSimilarBooks(String type, Pageable pageable);
 
     List<Map<String, String>> getTopBooks();
+
+    List<Book> fullTextSearchBook(String text);
 }

@@ -65,4 +65,9 @@ public class BookController {
         Long view_counts = redisUtil.addViewsRecord();
         return view_counts;
     }
+
+    @RequestMapping(value = "/fullTextSearchBook")
+    public List<Book> fullTextSearchBook(@RequestParam("text") String searchbookstr) {
+        return bookService.fullTextSearchBook(searchbookstr);
+    }
 }

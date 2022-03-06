@@ -10,25 +10,26 @@ import * as bookService from "../services/bookService";
 import '../css/home.css';
 
 class HomeView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            filterText: '',
-            filterClass: "全部",
-            books: [], 
-            pagination: {
-                current: 0,
-                pageSize: 16,
-            },
-        };
-        this.handleFilterTextChange =
-            this.handleFilterTextChange.bind(this);
-        this.handleSearch =
-            this.handleSearch.bind(this);
-        this.handleFilter = 
-            this.handleFilter.bind(this);
-        this.handlePage = 
-            this.handlePage.bind(this);
+    // constructor(props) {
+    //     super(props);
+        
+    //     this.handleFilterTextChange =
+    //         this.handleFilterTextChange.bind(this);
+    //     this.handleSearch =
+    //         this.handleSearch.bind(this);
+    //     this.handleFilter = 
+    //         this.handleFilter.bind(this);
+    //     this.handlePage = 
+    //         this.handlePage.bind(this);
+    // }
+    state = {
+        filterText: '',
+        filterClass: "全部",
+        books: [], 
+        pagination: {
+            current: 0,
+            pageSize: 16,
+        },
     }
 
     componentDidMount() {
@@ -74,11 +75,11 @@ class HomeView extends React.Component {
         </Menu>
     );
 
-    handleFilterTextChange(filterText) {
+    handleFilterTextChange = (filterText) => {
         this.setState({ filterText: filterText });
     }
 
-    handleSearch() {
+    handleSearch = () => {
         const { filterText, filterClass, pagination } = this.state;
         if (filterClass === "全部")
             bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
@@ -94,7 +95,7 @@ class HomeView extends React.Component {
                 });
     }
 
-    handleFilter() {
+    handleFilter = () => {
         const { filterText, filterClass, pagination } = this.state;
         if (filterClass === "全部")
             bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
@@ -110,7 +111,15 @@ class HomeView extends React.Component {
                 });
     }
 
-    handlePage(current, pageSize) {
+    handleFullTextSearch = () =>{
+        let filterText = this.state.filterText;
+        bookService.fullTextSearch(filterText, (data)=> {
+            console.log(data);
+            this.setState({books: data})
+        });
+    }
+
+    handlePage = (current, pageSize) => {
         const { filterText, filterClass} = this.state;
         if (filterClass === "全部")
             bookService.searchBookPage(filterText, current, pageSize,
@@ -135,7 +144,7 @@ class HomeView extends React.Component {
                     <Searchbar marginLeft={"400px"}
                         filterText={this.state.filterText}
                         onFilterTextChange={this.handleFilterTextChange}
-                        onClicked={this.handleSearch}
+                        onClicked={this.handleFullTextSearch}
                     />
                     <BookCarousel marginLeft={"200px"} width={"750px"} />
                     <Dropdown overlay={this.menu} trigger={['click']} className="dropDown">

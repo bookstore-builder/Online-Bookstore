@@ -63,4 +63,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Map<String, String>> getTopBooks() { return bookDao.getTopBooks(); }
+
+    @Override
+    public List<Book> fullTextSearchBook(String searchbookstr) {
+        return bookDao.fullTextSearchBook(searchbookstr);
+    }
 }
