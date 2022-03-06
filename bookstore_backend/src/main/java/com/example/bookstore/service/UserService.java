@@ -7,6 +7,10 @@ import com.example.bookstore.utils.msgutils.Msg;
 import java.util.List;
 
 public interface UserService {
+    Msg uploadAvatar(Integer userId, String avatar);
+
+    Msg getAvatar(Integer userId);
+
     Msg updateUser(User user);
 
     Msg activateUser(Integer userId);

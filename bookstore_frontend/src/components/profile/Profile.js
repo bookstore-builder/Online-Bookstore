@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Icon, Input, Button, Divider, Radio, DatePicker, message } from 'antd';
+import { Form, Icon, Input, Button, Divider, Radio, DatePicker, message, Upload } from 'antd';
 import moment from 'moment';
 import {UserPieChart} from "../statistic/Charts";
 import '../../css/profile.css'
@@ -9,6 +9,15 @@ import {getUserBookType} from "../../services/orderService"
 
 const { TextArea } = Input;
 const dateFormat = 'YYYY-MM-DD';
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
 
 export class Profile extends React.Component {
     constructor(props) {
@@ -23,7 +32,7 @@ export class Profile extends React.Component {
             birthday: '2000-09-23',
             address: "西川路800号海上交通大学",
             loading: false,
-            file: '',
+            avatar: '',
             data: [],
         };
         this.changeValue = this.changeValue.bind(this);
@@ -42,10 +51,14 @@ export class Profile extends React.Component {
                 email: data.email,
                 sex: data.sex,
                 address: data.address,
-                avatar: data.avatar,
             });
         };
         userService.getUser(userId, callback);
+        userService.getAvatar(userId, (data) => {
+            this.setState({
+                avatar: data.data
+            });
+        });
         getUserBookType(userId, (data) => {this.setState({data: data});});
     }
 
@@ -119,13 +132,25 @@ export class Profile extends React.Component {
             });
     }
 
+    handleUpload = (e) => {
+        getBase64(e.target.files[0]).then(
+            (result)=>{
+                this.setState({
+                    avatar: result,
+                });
+                userService.uploadAvatar(this.state.userId, result);
+            }
+        )
+    }
+
     render() {
         return (
             <div class="profile">
                 <h1 style={{ marginTop: "20px" }}>我的信息</h1>
                 <Divider />
                 <div className="avatar">
-                    <img src={head} className="round_icon" />
+                    {this.state.avatar ? <img src={this.state.avatar} className="round_icon" /> : <img src={head} className="round_icon" />}
+                    <Input type="file" style={{ width: "200px", height: "38px", marginLeft: "170px", marginTop: "20px" }} onChange={this.handleUpload}></Input>
                     <div className="chart">
                     <UserPieChart data={this.state.data}/>
                     </div>

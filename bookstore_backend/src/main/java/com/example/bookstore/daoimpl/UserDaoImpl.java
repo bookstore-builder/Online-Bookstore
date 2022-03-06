@@ -1,15 +1,11 @@
 package com.example.bookstore.daoimpl;
 
 import com.example.bookstore.dao.UserDao;
-import com.example.bookstore.entity.Book;
-import com.example.bookstore.entity.OrderItem;
-import com.example.bookstore.entity.User;
-import com.example.bookstore.repository.BookRepository;
-import com.example.bookstore.repository.OrderItemRepository;
+import com.example.bookstore.entity.*;
+import com.example.bookstore.repository.*;
 import com.example.bookstore.dto.UserResult;
-import com.example.bookstore.repository.UserAuthRepository;
-import com.example.bookstore.repository.UserRepository;
 import com.example.bookstore.utils.msgutils.Msg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Repository
 public class UserDaoImpl implements UserDao{
 
@@ -29,11 +26,31 @@ public class UserDaoImpl implements UserDao{
     private OrderItemRepository orderItemRepository;
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private UserAvatarRepository userAvatarRepository;
+
+    public Msg uploadAvatar(Integer userId, String avatar) {
+        UserAvatar userAvatar = userAvatarRepository.deleteByUserId(userId);
+        if (userAvatar == null) {
+            userAvatar = new UserAvatar();
+            userAvatar.setUserId(userId);
+        }
+        userAvatarRepository.deleteByUserId(userId);
+        userAvatar.setImageBase64(avatar);
+        userAvatarRepository.save(userAvatar);
+        return Msg.success(null, "已上传头像！");
+    }
+
+    public Msg getAvatar(Integer userId) {
+        UserAvatar userAvatar = userAvatarRepository.findByUserId(userId);
+        if (userAvatar == null)
+            return Msg.success("","");
+        else
+            return Msg.success(userAvatar.getImageBase64(),"");
+    }
 
     public Msg updateUser(User user) {
-//        System.out.print(user.getName());
         User searchUser = userRepository.findByUserId(user.getUserId());
-//        User searchUser = userRepository.findByUserName(user.getName());
         if(searchUser == null) {
             return Msg.failed("用户不存在！");
         } else {
@@ -81,6 +98,7 @@ public class UserDaoImpl implements UserDao{
         List<User> users = userRepository.findAllCustomers();
         for(User user: users) {
             UserResult userResult = new UserResult();
+            UserAvatar userAvatar = userAvatarRepository.findByUserId(user.getUserId());
             key++;
             userResult.setKey(key);
             userResult.setUserId(user.getUserId());
@@ -100,6 +118,9 @@ public class UserDaoImpl implements UserDao{
                 money = money.add(book.getPrice().multiply(new BigDecimal(userItem.getBookNum())));
             }
             userResult.setCost(money);
+            if (userAvatar != null) {
+                userResult.setAvatar(userAvatar.getImageBase64());
+            }
             userResults.add(userResult);
         }
         return userResults;

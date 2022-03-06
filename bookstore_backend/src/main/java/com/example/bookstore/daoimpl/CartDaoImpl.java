@@ -2,10 +2,7 @@ package com.example.bookstore.daoimpl;
 
 import com.example.bookstore.dao.CartDao;
 import com.example.bookstore.entity.*;
-import com.example.bookstore.repository.CartItemRepository;
-import com.example.bookstore.repository.UserAuthRepository;
-import com.example.bookstore.repository.UserCartRepository;
-import com.example.bookstore.repository.BookRepository;
+import com.example.bookstore.repository.*;
 import com.example.bookstore.dto.CartResult;
 import com.example.bookstore.utils.msgutils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +26,8 @@ public class CartDaoImpl implements CartDao{
     private BookRepository bookRepository;
     @Autowired
     private UserAuthRepository userAuthRepository;
+    @Autowired
+    private BookImageRepository bookImageRepository;
 
     public UserCart getCart(Integer userId) { return userCartRepository.findByUserId(userId); }
 
@@ -62,6 +61,7 @@ public class CartDaoImpl implements CartDao{
         for (CartItem curItem: cart) {
             CartResult cartResult = new CartResult();
             Book curBook = bookRepository.getBookByBookId(curItem.getBookId());
+            BookImage curBookImage = bookImageRepository.findByBookId(curItem.getBookId());
             key++;
             cartResult.setKey(key);
             cartResult.setBook(curBook.getImage());
@@ -71,6 +71,7 @@ public class CartDaoImpl implements CartDao{
             cartResult.setNum(curItem.getBookNum());
             cartResult.setMoney(curBook.getPrice().multiply(new BigDecimal(curItem.getBookNum())));
             cartResult.setBookId(curBook.getBookId());
+            if (curBookImage != null) cartResult.setBook(curBookImage.getImageBase64());
             cartResults.add(cartResult);
         }
         return cartResults;

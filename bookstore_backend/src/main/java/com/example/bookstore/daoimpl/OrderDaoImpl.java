@@ -32,6 +32,10 @@ public class OrderDaoImpl implements OrderDao{
     private UserAuthRepository userAuthRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BookImageRepository bookImageRepository;
+    @Autowired
+    private UserAvatarRepository userAvatarRepository;
 
     public Msg addItem(Integer bookId, Integer bookNum, Integer orderId) {
             Book curBook = bookRepository.getBookByBookId(bookId);
@@ -155,6 +159,7 @@ public class OrderDaoImpl implements OrderDao{
             for (OrderItem curItem: order.getItemList()) {
                 OrderResult orderResult = new OrderResult();
                 Book curBook = bookRepository.getBookByBookId(curItem.getBookId());
+                BookImage curBookImage = bookImageRepository.findByBookId(curItem.getBookId());
                 key++;
                 orderResult.setKey(key);
                 orderResult.setBook(curBook.getImage());
@@ -167,6 +172,7 @@ public class OrderDaoImpl implements OrderDao{
                 orderResult.setTotalMoney(money);
                 orderResult.setBookId(curBook.getBookId());
                 orderResult.setReceiver(order.getUserAuth().getUsername());
+                if (curBookImage != null) orderResult.setBook(curBookImage.getImageBase64());
                 orderResults.add(orderResult);
             }
         }
@@ -183,6 +189,7 @@ public class OrderDaoImpl implements OrderDao{
         Integer key = 0;
         for(Book book: books){
             key++;
+            BookImage curBookImage = bookImageRepository.findByBookId(book.getBookId());
             BookStatisticResult bookStatisticResult = new BookStatisticResult();
             Integer bookNum = orderItemRepository.getBookNum(book.getBookId(), time);
             if(bookNum == null) {
@@ -197,6 +204,7 @@ public class OrderDaoImpl implements OrderDao{
             bookStatisticResult.setType(book.getType());
             bookStatisticResult.setName(book.getName());
             bookStatisticResult.setImage(book.getImage());
+            if (curBookImage != null) bookStatisticResult.setImage(curBookImage.getImageBase64());
             bookStatisticResults.add(bookStatisticResult);
         }
         bookStatisticResults.sort(Comparator.comparing(BookStatisticResult::getNum).reversed());
@@ -224,6 +232,7 @@ public class OrderDaoImpl implements OrderDao{
             key++;
             BookStatisticResult bookStatisticResult = new BookStatisticResult();
             Book book = bookRepository.getBookByBookId(bookId);
+            BookImage bookImage = bookImageRepository.findByBookId(bookId);
             Integer bookNum = orderItemRepository.getUserBookNum(bookId, userId, time);
             bookStatisticResult.setNum(bookNum);
             bookStatisticResult.setMoney(book.getPrice().multiply(new BigDecimal(bookNum)));
@@ -232,6 +241,7 @@ public class OrderDaoImpl implements OrderDao{
             bookStatisticResult.setType(book.getType());
             bookStatisticResult.setName(book.getName());
             bookStatisticResult.setImage(book.getImage());
+            if (bookImage != null) bookStatisticResult.setImage(bookImage.getImageBase64());
             bookStatisticResults.add(bookStatisticResult);
         }
         bookStatisticResults.sort(Comparator.comparing(BookStatisticResult::getNum).reversed());
@@ -284,6 +294,7 @@ public class OrderDaoImpl implements OrderDao{
         for(User user: users){
             key ++;
             UserStatisticResult userStatisticResult = new UserStatisticResult();
+            UserAvatar userAvatar = userAvatarRepository.findByUserId(user.getUserId());
             Integer bookNum = 0;
             BigDecimal money = new BigDecimal("0.0");
             List<OrderItem> userItems = orderItemRepository.getUserTimeItems(user.getUserId(), time);
@@ -301,6 +312,7 @@ public class OrderDaoImpl implements OrderDao{
             }
             userStatisticResult.setKey(key);
             userStatisticResult.setName(user.getName());
+            if (userAvatar != null) userStatisticResult.setAvatar(userAvatar.getImageBase64());
             userStatisticResults.add(userStatisticResult);
         }
         userStatisticResults.sort(Comparator.comparing(UserStatisticResult::getNum).reversed());

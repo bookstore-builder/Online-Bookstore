@@ -17,6 +17,12 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
+    public Msg uploadAvatar(Integer userId, String avatar) { return userDao.uploadAvatar(userId, avatar); }
+
+    @Override
+    public Msg getAvatar(Integer userId) { return userDao.getAvatar(userId); }
+
+    @Override
     public Msg updateUser(User user) { return userDao.updateUser(user); }
 
     @Override
