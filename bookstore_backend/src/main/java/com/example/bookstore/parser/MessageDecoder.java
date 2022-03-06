@@ -30,7 +30,8 @@ public class MessageDecoder implements Decoder.Text<Message> {
                 case "chat":
                     msg = new ChatMessage(messageMap.get("user"),
                             messageMap.get("receiver"),
-                            messageMap.get("message"));
+                            messageMap.get("message"),
+                            messageMap.get("img"));
                     break;
                 case "info":
                     msg = new InfoMessage(messageMap.get("info"));
@@ -69,7 +70,7 @@ public class MessageDecoder implements Decoder.Text<Message> {
         if (keys.contains("type")) {
             switch (messageMap.get("type")) {
                 case "chat":
-                    String[] charMsgKeys = {"user", "receiver", "message"};
+                    String[] charMsgKeys = {"user", "receiver", "message", "img"};
                     if (keys.containsAll(Arrays.asList(charMsgKeys))) decodes = true;
                     break;
                 case "info":

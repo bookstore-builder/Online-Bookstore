@@ -5,7 +5,6 @@ import com.example.bookstore.entity.*;
 import com.example.bookstore.repository.*;
 import com.example.bookstore.dto.UserResult;
 import com.example.bookstore.utils.msgutils.Msg;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +13,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @Repository
 public class UserDaoImpl implements UserDao{
 

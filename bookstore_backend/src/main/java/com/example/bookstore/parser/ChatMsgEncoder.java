@@ -27,6 +27,7 @@ public class ChatMsgEncoder implements Encoder.Text<ChatMessage> {
                     .write("user", chatMessage.getUser())
                     .write("receiver", chatMessage.getReceiver())
                     .write("message", chatMessage.getMessage())
+                    .write("img", chatMessage.getImg())
                     .writeEnd();
         }
         return stringWriter.toString();

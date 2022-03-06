@@ -43,14 +43,14 @@ public class BotEndPoint {
             sendAll(session, new InfoMessage(joinMessage.getUser() + " has joined the chat."));
             sendAll(session, new UsersMessage(this.getUserList(session)));
         } else if (msg instanceof ChatMessage) {
-            System.out.println(msg);
             ChatMessage chatMessage = (ChatMessage) msg;
             session.getUserProperties().put("user", chatMessage.getUser());
             session.getUserProperties().put("receiver", chatMessage.getReceiver());
             session.getUserProperties().put("message", chatMessage.getMessage());
+            session.getUserProperties().put("img", chatMessage.getImg());
             logger.log(Level.INFO, "Received: {0}", chatMessage.toString());
             if (chatMessage.getReceiver().equals("all"))
-                sendAll(session, new ChatMessage(chatMessage.getUser(), chatMessage.getReceiver(), chatMessage.getMessage()));
+                sendAll(session, new ChatMessage(chatMessage.getUser(), chatMessage.getReceiver(), chatMessage.getMessage(), chatMessage.getImg()));
         }
     }
 
