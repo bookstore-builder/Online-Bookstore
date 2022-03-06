@@ -1,4 +1,4 @@
-import { Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select, Upload, Icon } from 'antd';
 import React from 'react';
 import "../../css/sidebar.css"
 import * as bookService from "../../services/bookService"
@@ -15,6 +15,15 @@ let info = {
     image: "",
     isbn: "",
 };
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
 
 export class BookForm extends React.Component {
     state = {
@@ -34,18 +43,22 @@ export class BookForm extends React.Component {
         });
     };
 
+    onUpload = (e) => {
+        getBase64(e.target.files[0]).then(
+            (result)=>{
+                info.image = result;
+                this.setState({
+                    info: info
+                });
+            }
+        )
+    }
+
     onNameInput = (e) => {
         info.name = e.target.value;
         this.setState({
             info: info,
         });
-    }
-
-    onUrlInput = (e) => {
-        info.image = e.target.value;
-        this.setState({
-            info: info,
-        })
     }
 
     onClassChange = (value) => {
@@ -123,9 +136,10 @@ export class BookForm extends React.Component {
                                 <Form.Item
                                     name="url"
                                     label="图片"
-                                    rules={[{ required: false, message: 'Please input image url' }]}
+                                    rules={[{ required: false, message: 'Please upload image' }]}
                                 >
-                                    <Input placeholder="Please input image url" onChange={this.onUrlInput} />
+                                    <Input type="file" onChange={this.onUpload}>
+                                    </Input>
                                 </Form.Item>
                             </Col>
                         </Row>

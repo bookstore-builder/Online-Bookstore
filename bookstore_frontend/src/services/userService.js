@@ -76,6 +76,26 @@ export const updateUser = (data) => {
     postRequest(url, data, callback);
 }
 
+export const uploadAvatar = (userId, avatar) => {
+    const data = {userId: userId, avatar: avatar};
+    const url = `${config.apiUrl}/uploadAvatar`;
+    const callback = (data) => {
+        if (data.code === 200) {
+            message.success(data.message);
+        }
+        else{
+            message.error(data.message);
+        }
+    };
+    postRequest_v2(url, data, callback);
+}
+
+export const getAvatar = (userId, callback) => {
+    const data = {userId: userId};
+    const url = `${config.apiUrl}/getAvatar`;
+    postRequest_v2(url, data, callback);
+}
+
 export const activateUser = (userId) => {
     const data = {userId: userId};
     const url = `${config.apiUrl}/activateUser`;

@@ -1,7 +1,16 @@
 import React from 'react';
-import { Form, Input, Radio, Icon, Button, Modal, Popconfirm } from 'antd';
+import { Form, Input, Radio, Icon, Button, Modal, Popconfirm, Upload } from 'antd';
 import book from '../../assets/bookexp.jpg';
 import '../../css/bookdetail.css';
+
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+}
 
 export class EditBookDetail extends React.Component {
 
@@ -13,7 +22,6 @@ export class EditBookDetail extends React.Component {
     }
 
     confirm = () => {
-        //console.log(this.props.info.name);
         this.props.handleDelete(this.props.info.name);
     }
 
@@ -45,8 +53,12 @@ export class EditBookDetail extends React.Component {
         this.props.handleDescription(e.target.value);
     }
 
-    handleUrl= (e) => {
-        this.props.handleImage(e.target.value);
+    handleUpload = (e) => {
+        getBase64(e.target.files[0]).then(
+            (result)=>{
+                this.props.handleImage(result);
+            }
+        )
     }
 
     showModal = () => {
@@ -75,20 +87,14 @@ export class EditBookDetail extends React.Component {
                         : <img src={book} className="book-image" style={{ marginTop: "30px" }} />}
                     <div className="group">
                         <span>
-                            <Button onClick={this.showModal}><Icon type="upload"/>Upload</Button>
-                            <Modal title="请输入图片Url" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel} width={300}>
-                                <span>
-                                    Url：
-                                <Input prefix={<Icon type="picture"/>} style={{ width: "150px" }} onChange={this.handleUrl} />
-                                </span>
-                            </Modal>
+                            <Input type="file" style={{ width:"200px", height: "38px", marginLeft: "-40px" }} onChange={this.handleUpload}></Input>
                             <Popconfirm
                                 title="确认要删除这本书吗？"
                                 onConfirm={this.confirm}
                                 okText="是"
                                 cancelText="否"
                             >
-                                <Button style={{ float: "right", marginTop: "0px", marginRight: "70px" }}>
+                                <Button style={{ float: "right", height: "38px", marginTop: "0px", marginRight: "30px" }}>
                                     <Icon type="delete" /> 删除
                             </Button>
                             </Popconfirm>

@@ -4,10 +4,13 @@ import com.example.bookstore.entity.Book;
 import com.example.bookstore.fulltextsearch.FilesPositionConfig;
 import com.example.bookstore.fulltextsearch.ReadWriteFiles;
 import com.example.bookstore.fulltextsearch.SearchFiles;
+import com.example.bookstore.entity.BookImage;
+import com.example.bookstore.repository.BookImageRepository;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.dao.BookDao;
 import com.example.bookstore.dto.DataPage;
 import com.example.bookstore.utils.msgutils.Msg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -21,39 +24,80 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Repository
 public class BookDaoImpl implements BookDao {
 
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private BookImageRepository bookImageRepository;
+
     @Override
     @Cacheable(value = "book", key = "'id-' + #p0")
     public Book getBook(Integer id){
-        return bookRepository.getBookByBookId(id);
+        Book searchBook = bookRepository.getBookByBookId(id);
+        BookImage searchBookImage = bookImageRepository.findByBookId(id);
+        if (searchBookImage != null) {
+            searchBook.setImage(searchBookImage.getImageBase64());
+        }
+        return searchBook;
     }
 
     @Override
     @Cacheable(value = "book-all", key = "#p0.pageNumber + '-' + #p0.pageSize")
     public DataPage<Book> getBooks(Pageable pageable) {
-        return new DataPage<>(bookRepository.getBooks(pageable));
+        DataPage<Book> bookPage = new DataPage<>(bookRepository.getBooks(pageable));
+        List<Book> books = bookPage.getObjectList();
+        for (int i=0; i < books.size(); i++) {
+            BookImage searchBookImage = bookImageRepository.findByBookId(books.get(i).getBookId());
+            if (searchBookImage != null) {
+                books.get(i).setImage(searchBookImage.getImageBase64());
+            }
+        }
+        return bookPage;
     }
 
     @Override
     public DataPage<Book> searchTypeBooks(String word, String type, Pageable pageable) {
-        return new DataPage<>(bookRepository.searchTypeBooks(word, type, pageable));
+        DataPage<Book> bookPage = new DataPage<>(bookRepository.searchTypeBooks(word, type, pageable));
+        List<Book> books = bookPage.getObjectList();
+        for (int i=0; i < books.size(); i++) {
+            BookImage searchBookImage = bookImageRepository.findByBookId(books.get(i).getBookId());
+            if (searchBookImage != null) {
+                books.get(i).setImage(searchBookImage.getImageBase64());
+            }
+        }
+        return bookPage;
     }
 
     @Override
     @Cacheable(value = "book-name", key = "#p0 + '-' + #p1.pageNumber + '-' + #p1.pageSize")
     public DataPage<Book> searchBooks(String word, Pageable pageable) {
-        return new DataPage<>(bookRepository.searchBooks(word, pageable));
+        DataPage<Book> bookPage = new DataPage<>(bookRepository.searchBooks(word, pageable));
+        List<Book> books = bookPage.getObjectList();
+        for (int i=0; i < books.size(); i++) {
+            BookImage searchBookImage = bookImageRepository.findByBookId(books.get(i).getBookId());
+            if (searchBookImage != null) {
+                books.get(i).setImage(searchBookImage.getImageBase64());
+            }
+        }
+        return bookPage;
     }
 
     @Override
     @Cacheable(value = "book-type", key = "#p0 + '-' + #p1.pageNumber + '-' + #p1.pageSize")
     public DataPage<Book> getSimilarBooks(String type, Pageable pageable) {
-        return new DataPage<>(bookRepository.getSimilarBooks(type, pageable));
+        DataPage<Book> bookPage = new DataPage<>(bookRepository.getSimilarBooks(type, pageable));
+        List<Book> books = bookPage.getObjectList();
+        for (int i=0; i < books.size(); i++) {
+            BookImage searchBookImage = bookImageRepository.findByBookId(books.get(i).getBookId());
+            if (searchBookImage != null) {
+                books.get(i).setImage(searchBookImage.getImageBase64());
+            }
+        }
+        return bookPage;
     }
 
     @Override
@@ -63,8 +107,13 @@ public class BookDaoImpl implements BookDao {
         if (searchBook != null) {
             return Msg.failed("书籍已存在！");
         } else {
+            BookImage bookImage = new BookImage();
+            bookImage.setImageBase64(book.getImage());
+            book.setImage("");
             bookRepository.save(book);
             ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getDescription(), true);
+            bookImage.setBookId(book.getBookId());
+            bookImageRepository.save(bookImage);
             return Msg.success(null, "已添加书籍！");
         }
     }
@@ -73,8 +122,12 @@ public class BookDaoImpl implements BookDao {
     @CacheEvict(cacheNames = {"book-all", "book-name", "book-type", "book"}, allEntries = true)
     public Msg deleteBook(Integer id) {
         Book searchBook = bookRepository.getBookByBookId(id);
+        BookImage searchBookImage = bookImageRepository.findByBookId(id);
         if (searchBook != null) {
             bookRepository.deleteByItemId(id);
+            if (searchBookImage != null) {
+                bookImageRepository.deleteByBookId(id);
+            }
             return Msg.success(null, "已删除书籍！");
         } else {
             return Msg.failed("书籍不存在！");
@@ -88,12 +141,12 @@ public class BookDaoImpl implements BookDao {
     @CacheEvict(cacheNames = {"book-all", "book-name", "book-type", "book"}, allEntries = true)
     public Msg updateBook(Book book) {
         Book searchBook = bookRepository.getBookByBookId(book.getBookId());
+        BookImage searchBookImage = bookImageRepository.findByBookId(book.getBookId());
         if (searchBook == null) {
             return Msg.failed("书籍不存在！");
         } else {
             searchBook.setAuthor(book.getAuthor());
             searchBook.setDescription(book.getDescription());
-            searchBook.setImage(book.getImage());
             searchBook.setInventory(book.getInventory());
             searchBook.setName(book.getName());
             searchBook.setPrice(book.getPrice());
@@ -101,6 +154,14 @@ public class BookDaoImpl implements BookDao {
             searchBook.setIsbn(book.getIsbn());
             bookRepository.save(searchBook);
             ReadWriteFiles.create_docs_files(searchBook.getBookId(), searchBook.getName() + searchBook.getDescription(), true);
+            if (searchBookImage == null) {
+                searchBookImage = new BookImage();
+                searchBookImage.setBookId(book.getBookId());
+            }
+            bookImageRepository.deleteByBookId(book.getBookId());
+            searchBookImage.setImageBase64(book.getImage());
+            bookImageRepository.save(searchBookImage);
+
             return Msg.success(null,"已更新书籍！");
         }
     }

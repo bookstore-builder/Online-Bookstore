@@ -1,27 +1,17 @@
 package com.example.bookstore.message;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@AllArgsConstructor
+@Getter
+@Setter
 public class ChatMessage extends Message{
     private String user;
     private String receiver;
     private String message;
-
-    public ChatMessage(String user, String receiver, String message) {
-        this.user = user;
-        this.receiver = receiver;
-        this.message = message;
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public String getReceiver() {
-        return receiver;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    private String img;
 
     @Override
     public String toString() {

@@ -136,7 +136,12 @@ export class UserStatisticTable extends React.Component{
                 title: '头像',
                 dataIndex: 'avatar',
                 key: 'avatar',
-                render: () => <Avatar size={64} src={head} />,
+                render: (avatar) => {
+                  if (avatar !== null) 
+                    return <Avatar size={64} src={avatar} />
+                  else 
+                    return <Avatar size={64} src={head} />
+                },
                 width: 150,
             },
             {

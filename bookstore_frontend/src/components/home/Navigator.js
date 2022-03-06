@@ -6,19 +6,27 @@ import * as userService from '../../services/userService'
 import logo from "../../assets/logo.svg";
 import head from "../../assets/head.png";
 import '../../css/navigator.css';
+import { getAvatar } from '../../services/userService';
 
 export class Navigator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             username: "thunderboy",
+            avatar: "",
         }
     }
 
     componentDidMount() {
         let user = localStorage.getItem("user");
         let username = JSON.parse(user).username;
-        this.setState({ username: username });
+        let userId = JSON.parse(user).userId;
+        this.setState({username: username});
+        getAvatar(userId, (data) => {
+            this.setState({ 
+                avatar: data.data, 
+            });
+        });
     }
 
     render() {
@@ -77,7 +85,7 @@ export class Navigator extends React.Component {
                             <li className="vl"></li>
                             <li style={{ fontSize: "15px", marginTop: "-2px" }}>Hi,{this.state.username}!
                                 <Dropdown overlay={menu} placement="bottomRight">
-                                    <img src={head} className="round_icon_" />
+                                    {this.state.avatar ? <img src={this.state.avatar} className="round_icon_" /> : <img src={head} className="round_icon_" />}
                                 </Dropdown>
                             </li>
                         </ul>
@@ -118,9 +126,12 @@ export class Navigator extends React.Component {
                             <li><Link to="/statistic"><Icon type="monitor" /></Link></li>
                             <li><Link style={{ fontSize: "15px" }} to="/adminStatistic">统计</Link></li>
                             <li className="vl"></li>
+                            <li><Link to="/chat"><Icon type="message" /></Link></li>
+                            <li><Link style={{ fontSize: "15px" }} to="/chat"> 社区</Link></li>
+                            <li className="vl"></li>
                             <li style={{ fontSize: "15px", marginTop: "-2px" }}>Hi,{this.state.username}!
                                 <Dropdown overlay={menu} placement="bottomRight">
-                                    <img src={head} className="round_icon_" />
+                                {this.state.avatar ? <img src={this.state.avatar} className="round_icon_" /> : <img src={head} className="round_icon_" />}
                                 </Dropdown>
                             </li>
                         </ul>
