@@ -185,10 +185,10 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<Book> fullTextSearchBook(String text) {
         List<Book> bookList = new ArrayList<>();
-        for (int i = 1; i < 30; ++i) {
-            Book book = bookRepository.getBookByBookId(i);
-            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getAuthor() + book.getDescription(), true);
-        }
+//        for (int i = 1; i < 30; ++i) {
+//            Book book = bookRepository.getBookByBookId(i);
+//            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getAuthor() + book.getDescription(), true);
+//        }
         try {
             String[] args = {"-index", FilesPositionConfig.indexPath, "-query", text};
             List<Integer> bookidList = SearchFiles.search_interface(args);
