@@ -2,6 +2,7 @@ import React from 'react';
 import { Comment, Avatar, Form, Button, List, Input } from 'antd';
 import moment from 'moment';
 import * as commentService from "../../services/commentService";
+import { getAvatar } from '../../services/userService';
 import head from "../../assets/head.png";
 
 const { TextArea } = Input;
@@ -51,7 +52,7 @@ export class CommentList extends React.Component{
             for (var i=0, len=data.length; i<len; i++) {
                 let result = {
                     author: data[i].author,
-                    avatar: head,
+                    avatar: data[i].avatar ? data[i].avatar : head,
                     content: <p>{data[i].comment}</p>,
                     datetime: data[i].time,
                 }
@@ -59,6 +60,11 @@ export class CommentList extends React.Component{
             }
             this.setState({
                 comments: results,
+            });
+        });
+        getAvatar(this.state.userId, (data) => {
+            this.setState({ 
+                avatar: data.data, 
             });
         });
     }
@@ -78,7 +84,7 @@ export class CommentList extends React.Component{
                     ...this.state.comments,
                     {
                         author: this.state.userName,
-                        avatar: head,
+                        avatar: this.state.avatar ? this.state.avatar : head,
                         content: <p>{this.state.value}</p>,
                         datetime: moment().subtract(1, 'days').format('YYYY/MM/DD HH:mm'),
                     },
@@ -100,7 +106,7 @@ export class CommentList extends React.Component{
         <div>
             {comments.length > 0 && <CommentLst comments={comments}/>}
             <Comment
-                avatar={<Avatar src={head} alt={this.state.userName}/>}
+                avatar={<Avatar src={this.state.avatar ? this.state.avatar : head} alt={this.state.userName}/>}
                 content={
                     <Editor
                         onChange={this.handleChange}

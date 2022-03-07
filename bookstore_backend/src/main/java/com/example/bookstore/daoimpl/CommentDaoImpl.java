@@ -5,8 +5,10 @@ import com.example.bookstore.dto.CommentResult;
 import com.example.bookstore.dto.OrderResult;
 import com.example.bookstore.entity.Book;
 import com.example.bookstore.entity.CommentItem;
+import com.example.bookstore.entity.UserAvatar;
 import com.example.bookstore.repository.BookRepository;
 import com.example.bookstore.repository.CommentItemRepository;
+import com.example.bookstore.repository.UserAvatarRepository;
 import com.example.bookstore.repository.UserRepository;
 import com.example.bookstore.utils.msgutils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class CommentDaoImpl implements CommentDao {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserAvatarRepository userAvatarRepository;
+
     public List<CommentResult> getBookComments(Integer bookId) {
         List<CommentResult> commentResults = new ArrayList<>();
         Integer key = 0;
@@ -39,6 +44,9 @@ public class CommentDaoImpl implements CommentDao {
             commentResult.setComment(commentItem.getComment());
             commentResult.setTime(commentItem.getTime());
             commentResult.setAuthor(userRepository.findByUserId(commentItem.getUserId()).getName());
+            commentResult.setAvatar("");
+            UserAvatar userAvatar = userAvatarRepository.findByUserId(commentItem.getUserId());
+            if (userAvatar != null) commentResult.setAvatar(userAvatar.getImageBase64());
             commentResults.add(commentResult);
         }
         commentResults.sort(Comparator.comparing(CommentResult::getTime).reversed());

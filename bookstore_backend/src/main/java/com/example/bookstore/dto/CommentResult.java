@@ -10,4 +10,5 @@ public class CommentResult {
     private String author;
     private String comment;
     private String time;
+    private String avatar;
 }
