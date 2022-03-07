@@ -111,7 +111,7 @@ public class BookDaoImpl implements BookDao {
             bookImage.setImageBase64(book.getImage());
             book.setImage("");
             bookRepository.save(book);
-            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getDescription(), true);
+            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getAuthor() + book.getDescription(), true);
             bookImage.setBookId(book.getBookId());
             bookImageRepository.save(bookImage);
             return Msg.success(null, "已添加书籍！");
@@ -153,7 +153,7 @@ public class BookDaoImpl implements BookDao {
             searchBook.setType(book.getType());
             searchBook.setIsbn(book.getIsbn());
             bookRepository.save(searchBook);
-            ReadWriteFiles.create_docs_files(searchBook.getBookId(), searchBook.getName() + searchBook.getDescription(), true);
+            ReadWriteFiles.create_docs_files(searchBook.getBookId(), searchBook.getName() + searchBook.getAuthor() + searchBook.getDescription(), true);
             if (searchBookImage == null) {
                 searchBookImage = new BookImage();
                 searchBookImage.setBookId(book.getBookId());
@@ -185,10 +185,10 @@ public class BookDaoImpl implements BookDao {
     @Override
     public List<Book> fullTextSearchBook(String text) {
         List<Book> bookList = new ArrayList<>();
-//        for (int i = 1; i < 30; ++i) {
-//            Book book = bookRepository.getBookByBookId(i);
-//            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getDescription(), true);
-//        }
+        for (int i = 1; i < 30; ++i) {
+            Book book = bookRepository.getBookByBookId(i);
+            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getAuthor() + book.getDescription(), true);
+        }
         try {
             String[] args = {"-index", FilesPositionConfig.indexPath, "-query", text};
             List<Integer> bookidList = SearchFiles.search_interface(args);
