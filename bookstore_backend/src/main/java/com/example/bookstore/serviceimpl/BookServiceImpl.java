@@ -68,4 +68,7 @@ public class BookServiceImpl implements BookService {
     public List<Book> fullTextSearchBook(String searchbookstr) {
         return bookDao.fullTextSearchBook(searchbookstr);
     }
+
+    @Override
+    public List<Book> fullTextSearchTypeBook(String word, String type) { return bookDao.fullTextSearchTypeBook(word, type); }
 }

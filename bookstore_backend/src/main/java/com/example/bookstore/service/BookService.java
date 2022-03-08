@@ -32,4 +32,6 @@ public interface BookService {
     List<Map<String, String>> getTopBooks();
 
     List<Book> fullTextSearchBook(String searchbookstr);
+
+    List<Book> fullTextSearchTypeBook(String word, String type);
 }

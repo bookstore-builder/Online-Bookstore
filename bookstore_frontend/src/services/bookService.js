@@ -25,6 +25,12 @@ export const fullTextSearch = (text, callback) => {
     postRequest_v2(url, data, callback);
 }
 
+export const fullTextSearchType = (text, type, callback) => {
+    const url = `${config.apiUrl}/fullTextSearchTypeBook`;
+    const data = {text: text, type: type};
+    postRequest_v2(url, data, callback);
+}
+
 export const searchBookPage = (word, pageNum, pageSize, callback) => {
     const data = {word: word, pageNum: pageNum, pageSize: pageSize};
     const url = `${config.apiUrl}/searchBookPage`;

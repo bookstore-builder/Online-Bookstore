@@ -158,21 +158,21 @@ class CartView extends React.Component {
                             姓名：
                                 <Input prefix={<Icon type="user" />} style={{ width: "150px" }} onChange={this.handleName} />
                         </span>
-                        <p />
+                        <br/><br/>
                         <span>
                             电话：
                                 <Input prefix={<Icon type="phone" />} style={{ width: "150px" }} onChange={this.handleTelephone} />
                         </span>
-                        <p />
+                        <br/><br/>
                         <span>
                             地址：
                                 <Input prefix={<Icon type="environment" />} style={{ width: "150px" }} onChange={this.handleAddress} />
                         </span>
-                        <p />
+                        <br/><br/>
                         <span style={{ float: "right" }}>
                             总消费:¥{this.state.totalPrice}
                         </span>
-                        <p />
+                        <br/>
                     </Modal>
                     <Modal title="订单详情" visible={this.state._visible} onOk={this._handleOK} onCancel={this._handleCancel} width={300}>
                         <span>

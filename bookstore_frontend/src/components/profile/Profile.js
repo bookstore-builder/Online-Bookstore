@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Icon, Input, Button, Divider, Radio, DatePicker, message, Upload } from 'antd';
+import { Form, Icon, Input, Button, Divider, Radio, DatePicker, message } from 'antd';
 import moment from 'moment';
 import {UserPieChart} from "../statistic/Charts";
 import '../../css/profile.css'

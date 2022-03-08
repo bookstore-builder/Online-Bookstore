@@ -30,4 +30,6 @@ public interface BookDao {
     List<Map<String, String>> getTopBooks();
 
     List<Book> fullTextSearchBook(String text);
+
+    List<Book> fullTextSearchTypeBook(String word, String type);
 }

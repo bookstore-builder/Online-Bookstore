@@ -10,18 +10,6 @@ import * as bookService from "../services/bookService";
 import '../css/home.css';
 
 class HomeView extends React.Component {
-    // constructor(props) {
-    //     super(props);
-
-    //     this.handleFilterTextChange =
-    //         this.handleFilterTextChange.bind(this);
-    //     this.handleSearch =
-    //         this.handleSearch.bind(this);
-    //     this.handleFilter = 
-    //         this.handleFilter.bind(this);
-    //     this.handlePage = 
-    //         this.handlePage.bind(this);
-    // }
     state = {
         filterText: '',
         filterClass: "全部",
@@ -47,31 +35,31 @@ class HomeView extends React.Component {
 
     menu = (
         <Menu>
-            <Menu.Item key="0" onClick={(e) => { this.setState({ filterClass: "全部" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="0" onClick={(e) => { this.setState({ filterClass: "全部" }, () => { this.handleFullTextSearch(); }) }}>
                 全部
             </Menu.Item>
-            <Menu.Item key="1" onClick={(e) => { this.setState({ filterClass: "编程" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="1" onClick={(e) => { this.setState({ filterClass: "编程" }, () => { this.handleFullTextSearch(); }) }}>
                 编程
             </Menu.Item>
-            <Menu.Item key="2" onClick={(e) => { this.setState({ filterClass: "魔幻小说" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="2" onClick={(e) => { this.setState({ filterClass: "魔幻小说" }, () => { this.handleFullTextSearch(); }) }}>
                 魔幻小说
             </Menu.Item>
-            <Menu.Item key="3" onClick={(e) => { this.setState({ filterClass: "科幻小说" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="3" onClick={(e) => { this.setState({ filterClass: "科幻小说" }, () => { this.handleFullTextSearch(); }) }}>
                 科幻小说
             </Menu.Item>
-            <Menu.Item key="4" onClick={(e) => { this.setState({ filterClass: "武侠小说" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="4" onClick={(e) => { this.setState({ filterClass: "武侠小说" }, () => { this.handleFullTextSearch(); }) }}>
                 武侠小说
             </Menu.Item>
-            <Menu.Item key="5" onClick={(e) => { this.setState({ filterClass: "悬疑/推理小说" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="5" onClick={(e) => { this.setState({ filterClass: "悬疑/推理小说" }, () => { this.handleFullTextSearch(); }) }}>
                 悬疑/推理小说
             </Menu.Item>
-            <Menu.Item key="6" onClick={(e) => { this.setState({ filterClass: "世界名著" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="6" onClick={(e) => { this.setState({ filterClass: "世界名著" }, () => { this.handleFullTextSearch(); }) }}>
                 世界名著
             </Menu.Item>
-            <Menu.Item key="7" onClick={(e) => { this.setState({ filterClass: "儿童文学" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="7" onClick={(e) => { this.setState({ filterClass: "儿童文学" }, () => { this.handleFullTextSearch(); }) }}>
                 儿童文学
             </Menu.Item>
-            <Menu.Item key="8" onClick={(e) => { this.setState({ filterClass: "中小学教辅" }, () => { this.handleFilter(); }) }}>
+            <Menu.Item key="8" onClick={(e) => { this.setState({ filterClass: "中小学教辅" }, () => { this.handleFullTextSearch(); }) }}>
                 中小学教辅
             </Menu.Item>
         </Menu>
@@ -81,62 +69,35 @@ class HomeView extends React.Component {
         this.setState({ filterText: filterText });
     }
 
-    handleSearch = () => {
-        const { filterText, filterClass, pagination } = this.state;
-        if (filterClass === "全部")
-            bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
-                (data) => {
-                    this.setState({
-                        books: data.objectList,
-                        pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
-                    });
-                });
-        else
-            bookService.searchTypeBookPage(filterText, filterClass, pagination.current, pagination.pageSize,
-                (data) => {
-                    this.setState({
-                        books: data.objectList,
-                        pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
-                    });
-                });
-    }
-
-    handleFilter = () => {
-        const { filterText, filterClass, pagination } = this.state;
-        if (filterClass === "全部")
-            bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
-                (data) => {
-                    this.setState({
-                        books: data.objectList,
-                        pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
-                    });
-                });
-        else
-            bookService.searchTypeBookPage(filterText, filterClass, pagination.current, pagination.pageSize,
-                (data) => {
-                    this.setState({
-                        books: data.objectList,
-                        pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
-                    });
-                });
-    }
-
     handleFullTextSearch = () => {
-        let filterText = this.state.filterText;
-        let pagination = this.state.pagination;
+        const { filterText, filterClass, pagination } = this.state;
         if (filterText === "") {
-            bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
-                (data) => {
-                    this.setState({
-                        books: data.objectList,
-                        pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
+            if (filterClass === "全部")
+                bookService.searchBookPage(filterText, pagination.current, pagination.pageSize,
+                    (data) => {
+                        this.setState({
+                            books: data.objectList,
+                            pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
+                        });
                     });
-                });
+            else 
+                bookService.searchTypeBookPage(filterText, filterClass, pagination.current, pagination.pageSize,
+                    (data) => {
+                        this.setState({
+                            books: data.objectList,
+                            pagination: { total: data.total, current: data.currentPage, pageSize: data.pageSize }
+                        });
+                    });
         } else {
-            bookService.fullTextSearch(filterText, (data) => {
-                console.log(data);
-                this.setState({ books: data })
-            });
+            if (filterClass === "全部")
+                bookService.fullTextSearch(filterText, (data) => {
+                    this.setState({ books: data })
+                });
+            else 
+                bookService.fullTextSearchType(filterText, filterClass, (data) => {
+                    console.log(data);
+                    this.setState( {books: data })
+                });
         }
     }
 

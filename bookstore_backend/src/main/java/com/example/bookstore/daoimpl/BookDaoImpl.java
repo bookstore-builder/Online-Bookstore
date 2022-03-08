@@ -13,12 +13,10 @@ import com.example.bookstore.utils.msgutils.Msg;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -183,12 +181,9 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
+    @Cacheable(value = "book-full", key = "'full-' + #p0")
     public List<Book> fullTextSearchBook(String text) {
         List<Book> bookList = new ArrayList<>();
-//        for (int i = 1; i < 30; ++i) {
-//            Book book = bookRepository.getBookByBookId(i);
-//            ReadWriteFiles.create_docs_files(book.getBookId(), book.getName() + book.getAuthor() + book.getDescription(), true);
-//        }
         try {
             String[] args = {"-index", FilesPositionConfig.indexPath, "-query", text};
             List<Integer> bookidList = SearchFiles.search_interface(args);
@@ -203,5 +198,17 @@ public class BookDaoImpl implements BookDao {
         }
         System.out.println(bookList);
         return bookList;
+    }
+
+    @Override
+    public List<Book> fullTextSearchTypeBook(String word, String type) {
+        List<Book> bookList = fullTextSearchBook(word);
+        List<Book> typeBookList = new ArrayList<>();
+        for(int i=0; i<bookList.size(); i++) {
+            if (bookList.get(i).getType().equals(type)) {
+                typeBookList.add(bookList.get(i));
+            }
+        }
+        return typeBookList;
     }
 }

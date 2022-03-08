@@ -70,4 +70,9 @@ public class BookController {
     public List<Book> fullTextSearchBook(@RequestParam("text") String searchbookstr) {
         return bookService.fullTextSearchBook(searchbookstr);
     }
+
+    @RequestMapping(value = "/fullTextSearchTypeBook")
+    public List<Book> fullTextSearchTypeBook(@RequestParam("text") String word, @RequestParam("type") String type) {
+        return bookService.fullTextSearchTypeBook(word, type);
+    }
 }

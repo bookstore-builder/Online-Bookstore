@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Radio, Icon, Button, Modal, Popconfirm, Upload } from 'antd';
+import { Form, Input, Radio, Icon, Button, Popconfirm } from 'antd';
 import book from '../../assets/bookexp.jpg';
 import '../../css/bookdetail.css';
 

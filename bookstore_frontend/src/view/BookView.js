@@ -187,21 +187,22 @@ class BookView extends React.Component {
                                 数量：
                             <InputNumber min={1} max={Math.min(100, this.state.bookInfo.inventory)} defaultValue={1} onChange={this._handleNumber}/>
                             </span>
-                            <p />
+                            <br/><br/>
                             <span>
                                 姓名：
                                 <Input prefix={<Icon type="user" />} style={{ width: "150px" }} onChange={this.handleName}/>
                             </span>
-                            <p />
+                            <br/><br/>
                             <span>
                                 电话：
                                 <Input prefix={<Icon type="phone" />} style={{ width: "150px" }} onChange={this.handleTelephone}/>
                             </span>
-                            <p />
+                            <br/><br/>
                             <span>
                                 地址：
                                 <Input prefix={<Icon type="environment" />} style={{ width: "150px" }} onChange={this.handleAddress}/>
                             </span>
+                            <br/>
                         </Modal>
                         <Modal title="订单详情" visible={this.state.__visible} width={300} onOk={this.__handleOK} onCancel={this.__handleCancel}>
                         <span>
@@ -218,12 +219,12 @@ class BookView extends React.Component {
                             电话：
                                 {this.state.telephone}
                         </span>
-                        <p />
+                        <br/><br/>
                         <span>
                             地址：
                                 {this.state.address}
                         </span>
-                        <p/>
+                        <br/>
                         <span style={{float:"right"}}>
                             总消费:¥{this.state.bookInfo.price * this.state._number}
                         </span>

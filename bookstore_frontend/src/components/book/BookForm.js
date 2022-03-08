@@ -1,4 +1,4 @@
-import { Drawer, Form, Button, Col, Row, Input, Select, Upload, Icon } from 'antd';
+import { Drawer, Form, Button, Col, Row, Input, Select } from 'antd';
 import React from 'react';
 import "../../css/sidebar.css"
 import * as bookService from "../../services/bookService"

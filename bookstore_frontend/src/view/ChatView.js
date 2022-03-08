@@ -1,14 +1,13 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { Navigator } from "../components/home/Navigator";
-import { Button, Typography } from 'antd';
-import { Layout, Menu, Breadcrumb, Input } from 'antd';
+import { Typography, Layout, Input } from 'antd';
 import { getAvatar } from "../services/userService";
 import head from "../assets/head.png";
 import '../css/chat.css';
 const { Search } = Input;
 const { TextArea } = Input;
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 const { Title } = Typography;
 
 const Message = ({chat, user}) => (
