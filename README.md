@@ -1,22 +1,32 @@
-# Online-Bookstore
-Group project for EE458-1 Software Engineering. (Constructed by React & Springboot)
+# E-Bookstore
+EE458-1：软件工程 第2小组课程项目（React & Springboot）。
 
-Taks to be done:
+一款`完整、高效、多功能`的网上电子书城系统。
 
-- 编写JMS程序（Activemq），接收并异步地处理订单，提高下订单的效率和吞吐量。(xx,fin)
-- 在首页增加访问量统计功能，通过多线程控制确保数据准确。 （lzn,fin）
-- 用WebSocket实现一个在线聊天室，用户可以在其中进行实时群聊。(xx,fin)
-- 使用Redis数据库作书籍信息的缓存，减少MySQL数据库的压力，提高访问速度和稳定性。 (lzn,fin)
-- 使用Lucene全文搜索引擎，对书籍简介文本建立索引，使用户可以快速高效地进行全文搜索。(xx,fin)
-- 将书籍图片信息转换成base64字符串存入MongoDB数据库，增加项目可移植性。(lzn, zhl, fin)
-- 添加书籍评论区，增加CommentItem数据库 (lzn,fin)
+在顾客端，实现了：注册登陆，个人信息管理，书籍查找，添加购物车，下订单，订单统计，评论与聊天等功能需求。
 
-- 异常处理与测试 (together,fin)
+在管理员端，实现了：整体订单统计，上传、修改书籍信息，全局订单统计，评论与聊天等功能需求。
 
+项目的类和类间关系如下图中所示：
 
+<img src="figures/class.png" alt="class" />
 
-Optional task:
+项目的整体特征可以用以下几点来概括：
 
-- [ ] SOAP Web Service
-- [ ] microservice
-- [ ] Nginx负载均衡
+- 完整性：集成顾客、管理员两种用户类型界面
+
+  <img src="figures/homepage.png" alt="homepage" style="zoom:50%;" />
+
+  <img src="figures/manager.png" alt="manager" style="zoom:50%;" />
+
+- “书城+社区”理念：兼顾评论与聊天功能（Websocket），顾客、商家、管理员之间可以自由交流
+
+  <img src="figures/bookdetail.png" alt="bookdetail" style="zoom:50%;" />
+
+  <img src="figures/chatroom.png" alt="chatroom" style="zoom:50%;" />
+
+- 用户友好：隐私保护，直观、美观的统计可视化功能，Lucene全文搜索功能
+
+  <img src="figures/statistic.png" alt="statistic" style="zoom:50%;" />
+
+- 响应快速：Activemq订单异步处理+Redis内容缓存
